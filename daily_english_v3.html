@@ -1,0 +1,1269 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Daily English</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400;1,700&family=Source+Serif+4:ital,opsz,wght@0,8..60,300;0,8..60,400;1,8..60,300;1,8..60,400&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --cream:#f8f3e8; --cream2:#f0e9d6; --ink:#1c1712; --ink2:#3d3428;
+    --ink3:#7a6d5a; --rule:#c8b89a; --red:#8b1a1a; --gold:#b8860b;
+    --green:#2a5a3a; --blue:#1a3a5c;
+  }
+  *{box-sizing:border-box;margin:0;padding:0;}
+  body{
+    background:#cdc4b0;
+    background-image:url("data:image/svg+xml,%3Csvg width='4' height='4' viewBox='0 0 4 4' xmlns='http://www.w3.org/2000/svg'%3E%3Crect x='0' y='0' width='1' height='1' fill='%23b8a88855'/%3E%3C/svg%3E");
+    min-height:100vh; font-family:'Source Serif 4',Georgia,serif; color:var(--ink);
+    padding:20px 12px 60px;
+  }
+
+  /* MASTHEAD */
+  .masthead{max-width:900px;margin:0 auto;background:var(--cream);border:1px solid var(--rule);border-bottom:none;padding:18px 28px 0;box-shadow:0 4px 28px rgba(28,23,18,.15);}
+  .mast-top{display:flex;justify-content:space-between;align-items:flex-start;padding-bottom:10px;border-bottom:1px solid var(--rule);margin-bottom:8px;gap:12px;flex-wrap:wrap;}
+  .mast-meta{font-family:'DM Mono',monospace;font-size:10px;color:var(--ink3);line-height:1.8;letter-spacing:.06em;}
+  .mast-title{font-family:'Playfair Display',serif;font-weight:900;font-size:clamp(30px,6.5vw,64px);line-height:1;letter-spacing:-.02em;text-align:center;flex:1;padding:0 12px;}
+  .mast-title em{font-style:italic;color:var(--red);}
+  .mast-tagline{font-family:'Playfair Display',serif;font-style:italic;font-size:11px;color:var(--ink3);text-align:center;letter-spacing:.05em;border-top:1px solid var(--rule);border-bottom:3px double var(--rule);padding:5px 0;}
+
+  /* NAV */
+  .nav{max-width:900px;margin:0 auto;background:var(--ink);display:flex;overflow-x:auto;}
+  .nav-btn{padding:9px 18px;font-family:'DM Mono',monospace;font-size:10.5px;letter-spacing:.08em;text-transform:uppercase;color:#9a8a74;cursor:pointer;border:none;background:none;white-space:nowrap;transition:all .15s;border-bottom:2px solid transparent;}
+  .nav-btn:hover{color:var(--cream);}
+  .nav-btn.active{color:var(--cream);border-bottom-color:var(--gold);}
+  .nav-btn small{display:block;font-size:8px;opacity:.5;margin-top:1px;}
+  .nb-count{display:inline-flex;align-items:center;justify-content:center;background:var(--red);color:white;font-size:9px;font-family:'DM Mono',monospace;width:16px;height:16px;border-radius:50%;margin-left:5px;vertical-align:middle;}
+
+  /* PAPER */
+  .paper{max-width:900px;margin:0 auto;background:var(--cream);border:1px solid var(--rule);border-top:none;box-shadow:0 4px 28px rgba(28,23,18,.15);min-height:55vh;}
+  .day-bar{background:var(--ink2);color:var(--cream);padding:9px 28px;display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;}
+  .day-bar-theme{font-family:'Playfair Display',serif;font-style:italic;font-size:14px;}
+  .day-bar-meta{font-family:'DM Mono',monospace;font-size:10px;opacity:.5;}
+  .day-nav{display:flex;gap:6px;align-items:center;}
+  .day-nav button{width:26px;height:26px;border:1px solid rgba(255,255,255,.2);background:none;color:var(--cream);cursor:pointer;font-size:13px;border-radius:2px;display:flex;align-items:center;justify-content:center;transition:background .15s;}
+  .day-nav button:hover{background:var(--red);}
+  .day-nav span{font-family:'DM Mono',monospace;font-size:10px;opacity:.45;min-width:44px;text-align:center;}
+
+  /* PANELS */
+  .panel{display:none;}
+  .panel.active{display:block;animation:fadeUp .25s ease both;}
+  @keyframes fadeUp{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
+
+  /* ARTICLE */
+  .art-wrap{padding:26px 28px;}
+  .art-kicker{font-family:'DM Mono',monospace;font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--red);margin-bottom:7px;display:flex;align-items:center;gap:8px;}
+  .art-kicker::after{content:'';flex:1;height:1px;background:var(--rule);}
+  .art-hed{font-family:'Playfair Display',serif;font-size:clamp(20px,4.5vw,32px);font-weight:700;line-height:1.15;margin-bottom:9px;}
+  .art-deck{font-size:15px;font-style:italic;color:var(--ink3);line-height:1.55;border-left:3px solid var(--rule);padding-left:13px;margin-bottom:18px;}
+  .art-byline{font-family:'DM Mono',monospace;font-size:10px;letter-spacing:.06em;color:var(--ink3);padding:7px 0;border-top:1px solid var(--rule);border-bottom:1px solid var(--rule);margin-bottom:20px;}
+  .art-cols{display:grid;grid-template-columns:1fr 1fr;gap:20px;}
+  @media(max-width:600px){.art-cols{grid-template-columns:1fr;}.art-wrap,.dlg-wrap,.quiz-wrap{padding:18px 16px;}.day-bar{padding:9px 16px;}}
+  .art-body{font-size:15px;line-height:1.8;color:var(--ink2);}
+  .art-body p{margin-bottom:13px;}
+
+  /* CLICKABLE WORD — any word in article */
+  .art-body span.w{cursor:pointer;border-bottom:1px dashed transparent;transition:all .15s;}
+  .art-body span.w:hover{border-bottom-color:var(--gold);background:linear-gradient(180deg,transparent 58%,rgba(184,134,11,.2) 58%);}
+  /* highlighted curated words */
+  .hw{background:linear-gradient(180deg,transparent 58%,rgba(184,134,11,.25) 58%);cursor:pointer;border-bottom:1px dashed var(--gold);transition:background .15s;}
+  .hw:hover{background:linear-gradient(180deg,transparent 58%,rgba(184,134,11,.5) 58%);}
+
+  /* lookup hint bar */
+  .lookup-hint{background:#fffaee;border-bottom:1px solid #e8d8a0;padding:7px 28px;font-family:'DM Mono',monospace;font-size:10px;color:var(--gold);letter-spacing:.05em;}
+
+  /* VOCAB SIDEBAR */
+  .vocab-col{border-left:2px double var(--rule);padding-left:18px;}
+  .vocab-col-head{font-family:'Playfair Display',serif;font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;padding-bottom:7px;border-bottom:2px solid var(--ink);margin-bottom:12px;}
+  .ve{padding:9px 0;border-bottom:1px solid var(--rule);cursor:pointer;transition:padding-left .15s;position:relative;}
+  .ve:hover{padding-left:4px;}
+  .ve:last-child{border-bottom:none;}
+  .ve-word{font-family:'Playfair Display',serif;font-size:16px;font-weight:700;color:var(--red);margin-bottom:1px;}
+  .ve-pron{font-family:'DM Mono',monospace;font-size:9.5px;color:var(--ink3);margin-bottom:2px;}
+  .ve-zh{font-size:13px;color:var(--ink2);margin-bottom:2px;}
+  .ve-eg{font-size:12px;font-style:italic;color:var(--ink3);line-height:1.4;}
+  .ve-saved{position:absolute;top:10px;right:0;font-size:11px;color:var(--gold);}
+
+  /* WORD POPUP */
+  .wp{display:none;position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:var(--ink);color:var(--cream);padding:16px 20px 14px;border-radius:8px;box-shadow:0 8px 36px rgba(0,0,0,.4);z-index:100;max-width:360px;width:92%;animation:popUp .18s ease;}
+  @keyframes popUp{from{opacity:0;transform:translateX(-50%) translateY(8px)}to{opacity:1;transform:translateX(-50%) translateY(0)}}
+  .wp.show{display:block;}
+  .wp-close{position:absolute;top:8px;right:12px;background:none;border:none;color:rgba(255,255,255,.35);cursor:pointer;font-size:17px;}
+  .wp-word{font-family:'Playfair Display',serif;font-size:22px;color:#f0c060;margin-bottom:3px;}
+  .wp-pron{font-family:'DM Mono',monospace;font-size:10px;color:#a09080;margin-bottom:6px;}
+  .wp-zh{font-size:15px;margin-bottom:4px;}
+  .wp-eg{font-size:12.5px;font-style:italic;color:#a09080;margin-bottom:12px;line-height:1.5;}
+  .wp-loading{font-family:'DM Mono',monospace;font-size:11px;color:#a09080;padding:10px 0;}
+  .wp-actions{display:flex;gap:8px;}
+  .wp-save-btn{flex:1;background:var(--gold);color:var(--ink);border:none;padding:8px 0;font-family:'DM Mono',monospace;font-size:10.5px;letter-spacing:.06em;cursor:pointer;border-radius:3px;font-weight:500;transition:opacity .15s;}
+  .wp-save-btn:hover{opacity:.85;}
+  .wp-save-btn.saved{background:#3a7a4a;color:white;}
+  .wp-dismiss{background:rgba(255,255,255,.08);color:rgba(255,255,255,.5);border:none;padding:8px 14px;font-family:'DM Mono',monospace;font-size:10px;cursor:pointer;border-radius:3px;transition:background .15s;}
+  .wp-dismiss:hover{background:rgba(255,255,255,.15);}
+
+  /* NOTEBOOK PANEL */
+  .nb-wrap{padding:26px 28px;}
+  .nb-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;flex-wrap:wrap;gap:10px;}
+  .nb-title{font-family:'Playfair Display',serif;font-size:24px;font-weight:700;}
+  .nb-actions{display:flex;gap:8px;}
+  .nb-btn{background:none;border:1.5px solid var(--rule);color:var(--ink3);padding:6px 14px;font-family:'DM Mono',monospace;font-size:10px;letter-spacing:.06em;cursor:pointer;border-radius:2px;transition:all .15s;}
+  .nb-btn:hover{border-color:var(--ink);color:var(--ink);}
+  .nb-btn.danger:hover{border-color:var(--red);color:var(--red);}
+  .nb-search{width:100%;border:1.5px solid var(--rule);background:var(--cream2);font-family:'Source Serif 4',serif;font-size:14px;color:var(--ink);padding:9px 13px;border-radius:4px;outline:none;margin-bottom:16px;transition:border-color .15s;}
+  .nb-search:focus{border-color:var(--ink);}
+  .nb-empty{text-align:center;padding:48px 20px;color:var(--ink3);font-style:italic;font-size:15px;}
+  .nb-empty span{display:block;font-size:32px;margin-bottom:12px;}
+  .nb-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:10px;}
+  .nb-card{background:var(--cream2);border:1px solid var(--rule);border-radius:6px;padding:14px;position:relative;transition:box-shadow .15s;}
+  .nb-card:hover{box-shadow:0 3px 12px rgba(28,23,18,.1);}
+  .nb-card-word{font-family:'Playfair Display',serif;font-size:18px;font-weight:700;color:var(--red);margin-bottom:2px;}
+  .nb-card-pron{font-family:'DM Mono',monospace;font-size:9px;color:var(--ink3);margin-bottom:4px;}
+  .nb-card-zh{font-size:13px;color:var(--ink2);margin-bottom:4px;}
+  .nb-card-eg{font-size:11.5px;font-style:italic;color:var(--ink3);line-height:1.4;margin-bottom:8px;}
+  .nb-card-day{font-family:'DM Mono',monospace;font-size:9px;color:var(--ink3);opacity:.6;}
+  .nb-card-del{position:absolute;top:8px;right:10px;background:none;border:none;color:var(--rule);cursor:pointer;font-size:14px;transition:color .15s;}
+  .nb-card-del:hover{color:var(--red);}
+  .nb-stats{display:flex;gap:16px;margin-bottom:20px;flex-wrap:wrap;}
+  .nb-stat{background:var(--cream2);border:1px solid var(--rule);border-radius:4px;padding:10px 16px;font-family:'DM Mono',monospace;font-size:10px;color:var(--ink3);letter-spacing:.05em;}
+  .nb-stat strong{display:block;font-size:22px;color:var(--red);font-family:'Playfair Display',serif;margin-bottom:2px;}
+
+  /* QUIZ */
+  .quiz-wrap{padding:26px 28px;}
+  .q-head{font-family:'Playfair Display',serif;font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;display:flex;align-items:center;gap:10px;margin-bottom:14px;}
+  .q-head::after{content:'';flex:1;height:1px;background:var(--rule);}
+  .q-items{display:flex;flex-direction:column;gap:10px;}
+  .q-row{display:flex;align-items:center;gap:12px;background:var(--cream2);border:1px solid var(--rule);border-radius:4px;padding:11px 15px;}
+  .q-zh{flex:1;font-size:16px;}
+  .q-inp{border:none;border-bottom:1.5px solid var(--rule);background:transparent;font-family:'Source Serif 4',serif;font-size:15px;color:var(--ink);padding:2px 4px;width:175px;outline:none;transition:border-color .15s;}
+  .q-inp:focus{border-bottom-color:var(--red);}
+  .q-inp.ok{border-bottom-color:var(--green);color:var(--green);}
+  .q-inp.no{border-bottom-color:var(--red);color:var(--red);}
+  .q-btn{display:block;margin:14px 0 0 auto;background:var(--ink);color:var(--cream);border:none;padding:8px 18px;font-family:'DM Mono',monospace;font-size:10.5px;letter-spacing:.06em;cursor:pointer;border-radius:2px;transition:background .15s;}
+  .q-btn:hover{background:var(--red);}
+  .q-result{margin-top:10px;font-family:'DM Mono',monospace;font-size:11px;color:var(--ink3);display:none;}
+
+  /* DIALOGUE */
+  .dlg-wrap{padding:26px 28px;}
+  .dlg-badge{display:inline-flex;align-items:center;gap:6px;font-family:'DM Mono',monospace;font-size:10px;letter-spacing:.1em;text-transform:uppercase;padding:3px 9px;border:1px solid var(--rule);border-radius:2px;color:var(--ink3);margin-bottom:14px;}
+  .dlg-scene{font-family:'Playfair Display',serif;font-size:19px;font-weight:700;margin-bottom:4px;}
+  .dlg-ctx{font-size:13px;font-style:italic;color:var(--ink3);margin-bottom:18px;padding-bottom:14px;border-bottom:1px solid var(--rule);}
+  .ai-loading{display:flex;flex-direction:column;align-items:center;justify-content:center;padding:40px 20px;gap:14px;color:var(--ink3);}
+  .spinner{width:28px;height:28px;border:2px solid var(--rule);border-top-color:var(--red);border-radius:50%;animation:spin .7s linear infinite;}
+  @keyframes spin{to{transform:rotate(360deg)}}
+  .ai-loading p{font-family:'DM Mono',monospace;font-size:11px;letter-spacing:.06em;}
+  .script-lines{display:flex;flex-direction:column;gap:3px;margin-bottom:18px;}
+  .sl{display:flex;gap:11px;padding:9px 13px;border-radius:4px;font-size:15px;line-height:1.55;}
+  .sl.A{background:#edf0f8;} .sl.B{background:#f5f0e2;}
+  .sl-spk{font-family:'DM Mono',monospace;font-size:9.5px;color:var(--ink3);min-width:18px;padding-top:3px;letter-spacing:.06em;}
+  .sl-en{color:var(--ink);}
+  .sl-zh{font-size:12px;color:var(--ink3);font-style:italic;margin-top:2px;}
+  .shadow .sl-en{color:transparent;background:var(--ink2);border-radius:2px;cursor:pointer;transition:all .2s;user-select:none;}
+  .shadow .sl-en:hover,.shadow .sl-en.shown{color:var(--ink);background:transparent;}
+  .dlg-actions{display:flex;gap:8px;flex-wrap:wrap;}
+  .dlg-btn{background:none;border:1.5px solid var(--ink);color:var(--ink);padding:7px 15px;font-family:'DM Mono',monospace;font-size:10px;letter-spacing:.06em;cursor:pointer;border-radius:2px;transition:all .15s;}
+  .dlg-btn:hover{background:var(--ink);color:var(--cream);}
+  .rp-chat{display:flex;flex-direction:column;gap:9px;margin-bottom:16px;min-height:80px;}
+  .bubble{max-width:82%;padding:11px 15px;font-size:14.5px;line-height:1.55;border-radius:4px;}
+  .bubble.ai{background:var(--ink2);color:var(--cream);align-self:flex-start;border-bottom-left-radius:0;}
+  .bubble.user{background:var(--cream2);border:1px solid var(--rule);align-self:flex-end;border-bottom-right-radius:0;}
+  .bubble small{display:block;font-family:'DM Mono',monospace;font-size:8.5px;opacity:.5;margin-bottom:3px;text-transform:uppercase;letter-spacing:.07em;}
+  .rp-thinking{font-family:'DM Mono',monospace;font-size:11px;color:var(--ink3);padding:6px 4px;display:none;font-style:italic;}
+  .rp-input-row{display:flex;gap:8px;align-items:flex-end;}
+  .rp-input{flex:1;border:1.5px solid var(--rule);background:white;font-family:'Source Serif 4',serif;font-size:15px;color:var(--ink);padding:9px 13px;border-radius:4px;outline:none;resize:none;min-height:42px;transition:border-color .15s;}
+  .rp-input:focus{border-color:var(--ink);}
+  .rp-send{background:var(--ink);color:var(--cream);border:none;padding:9px 16px;font-family:'DM Mono',monospace;font-size:10px;letter-spacing:.06em;cursor:pointer;border-radius:4px;transition:background .15s;white-space:nowrap;}
+  .rp-send:hover{background:var(--red);}
+  .hint-toggle{font-family:'DM Mono',monospace;font-size:10px;color:var(--ink3);cursor:pointer;text-decoration:underline;margin-top:5px;display:inline-block;}
+  .hint-box{display:none;margin-top:7px;background:#fffaee;border-left:3px solid var(--gold);padding:8px 13px;font-size:13px;font-style:italic;color:var(--ink2);border-radius:0 4px 4px 0;}
+  .hint-box.show{display:block;}
+  .sit-card{background:var(--cream2);border:1px solid var(--rule);border-radius:4px;padding:18px;margin-bottom:14px;}
+  .sit-prompt{font-size:15.5px;line-height:1.6;margin-bottom:14px;color:var(--ink2);}
+  .sit-area{width:100%;border:1.5px dashed var(--rule);background:white;font-family:'Source Serif 4',serif;font-size:15px;color:var(--ink);padding:12px;border-radius:4px;outline:none;resize:vertical;min-height:72px;display:block;margin-bottom:9px;transition:border-color .15s;}
+  .sit-area:focus{border-color:var(--ink);border-style:solid;}
+  .reveal-btn{background:none;border:1.5px solid var(--ink);color:var(--ink);padding:7px 16px;font-family:'DM Mono',monospace;font-size:10px;letter-spacing:.06em;cursor:pointer;border-radius:2px;transition:all .15s;}
+  .reveal-btn:hover{background:var(--ink);color:var(--cream);}
+  .sit-ans{display:none;margin-top:12px;background:white;border:1px solid var(--rule);border-radius:4px;padding:13px;}
+  .sit-ans.show{display:block;}
+  .sit-ans-en{font-family:'Playfair Display',serif;font-size:18px;font-style:italic;color:var(--red);margin-bottom:5px;}
+  .sit-ans-note{font-size:13px;color:var(--ink3);line-height:1.5;}
+
+  /* FOOTER */
+  .footer{max-width:900px;margin:0 auto;background:var(--ink2);color:var(--cream);padding:11px 28px;display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;font-family:'DM Mono',monospace;font-size:10.5px;letter-spacing:.06em;}
+  .prog-dots{display:flex;gap:4px;}
+  .pdot{width:8px;height:8px;border-radius:50%;background:rgba(255,255,255,.18);transition:background .2s;}
+  .pdot.done{background:var(--gold);} .pdot.now{background:white;}
+  .done-badge{display:none;background:var(--gold);color:var(--ink);padding:3px 10px;border-radius:2px;font-weight:500;}
+
+  /* Toast */
+  .toast{position:fixed;bottom:80px;left:50%;transform:translateX(-50%);background:var(--green);color:white;padding:10px 20px;border-radius:6px;font-family:'DM Mono',monospace;font-size:11px;letter-spacing:.06em;opacity:0;transition:opacity .3s;pointer-events:none;z-index:200;}
+  .toast.show{opacity:1;}
+
+  /* VIDEO PANEL */
+  .vid-wrap{padding:0 0 28px;}
+  .vid-kicker{font-family:'DM Mono',monospace;font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--red);padding:16px 28px 10px;display:flex;align-items:center;gap:8px;}
+  .vid-kicker::after{content:'';flex:1;height:1px;background:var(--rule);}
+
+  /* YouTube embed */
+  .yt-container{position:relative;width:100%;background:#000;overflow:hidden;}
+  .yt-frame{width:100%;aspect-ratio:16/9;border:none;display:block;}
+
+  /* Simulated video player (text mode) */
+  .sim-player{position:relative;background:#111;width:100%;aspect-ratio:16/9;display:flex;align-items:flex-end;overflow:hidden;cursor:pointer;}
+  .sim-bg{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;}
+  .sim-bg-img{width:100%;height:100%;object-fit:cover;opacity:.7;}
+  .sim-bg-gradient{position:absolute;inset:0;background:linear-gradient(to top,rgba(0,0,0,.85) 0%,transparent 50%);}
+  .sim-play-btn{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:56px;height:56px;background:rgba(255,255,255,.15);backdrop-filter:blur(4px);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:22px;transition:all .2s;border:2px solid rgba(255,255,255,.3);}
+  .sim-player.playing .sim-play-btn{display:none;}
+  .sim-subtitles{position:absolute;bottom:52px;left:0;right:0;text-align:center;padding:0 20px;z-index:10;}
+  .sub-line{display:inline-block;background:rgba(0,0,0,.82);color:white;font-size:clamp(13px,3.5vw,17px);line-height:1.4;padding:5px 12px;border-radius:3px;margin-bottom:4px;max-width:90%;}
+  .sub-en{font-weight:400;margin-bottom:2px;}
+  .sub-zh{font-size:clamp(11px,2.8vw,13px);color:rgba(255,255,255,.75);}
+  .sub-word-pill{display:inline-block;background:rgba(255,255,255,.92);color:var(--ink);font-size:clamp(10px,2.5vw,12px);padding:2px 10px;border-radius:12px;margin-top:4px;font-family:'DM Mono',monospace;cursor:pointer;letter-spacing:.04em;}
+  .sub-word-pill:hover{background:var(--gold);color:white;}
+
+  /* Video progress bar */
+  .vid-controls{background:#1a1a1a;padding:8px 14px;display:flex;align-items:center;gap:10px;}
+  .vid-prog-bg{flex:1;height:3px;background:rgba(255,255,255,.2);border-radius:2px;cursor:pointer;position:relative;}
+  .vid-prog-fill{height:100%;background:var(--red);border-radius:2px;transition:width .5s linear;width:0%;}
+  .vid-time{font-family:'DM Mono',monospace;font-size:10px;color:rgba(255,255,255,.5);min-width:64px;text-align:right;}
+  .vid-play-pause{background:none;border:none;color:white;font-size:16px;cursor:pointer;padding:0 4px;}
+
+  /* Word breakdown strip below video */
+  .word-strip{padding:14px 28px;border-bottom:1px solid var(--rule);background:var(--cream2);}
+  .word-strip-label{font-family:'DM Mono',monospace;font-size:9px;letter-spacing:.12em;text-transform:uppercase;color:var(--ink3);margin-bottom:10px;}
+  .word-pills-row{display:flex;gap:8px;flex-wrap:wrap;}
+  .word-pill{display:flex;align-items:center;gap:6px;background:white;border:1px solid var(--rule);border-radius:20px;padding:5px 12px;cursor:pointer;transition:all .15s;font-size:13px;}
+  .word-pill:hover{border-color:var(--gold);background:#fffaee;}
+  .word-pill-en{font-weight:600;color:var(--red);}
+  .word-pill-zh{color:var(--ink3);font-size:12px;}
+  .word-pill-save{font-size:11px;color:var(--ink3);margin-left:2px;}
+
+  /* Transcript section */
+  .transcript-wrap{padding:16px 28px 24px;}
+  .transcript-head{font-family:'Playfair Display',serif;font-size:13px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;display:flex;align-items:center;gap:10px;margin-bottom:14px;cursor:pointer;}
+  .transcript-head::after{content:'';flex:1;height:1px;background:var(--rule);}
+  .transcript-toggle{font-family:'DM Mono',monospace;font-size:10px;color:var(--ink3);margin-left:4px;}
+  .transcript-lines{display:flex;flex-direction:column;gap:6px;}
+  .tl{display:flex;gap:10px;padding:8px 10px;border-radius:4px;cursor:pointer;transition:background .15s;border:1px solid transparent;}
+  .tl:hover,.tl.active{background:#fffaee;border-color:var(--rule);}
+  .tl-time{font-family:'DM Mono',monospace;font-size:10px;color:var(--ink3);min-width:32px;padding-top:2px;}
+  .tl-en{font-size:14px;color:var(--ink);line-height:1.4;}
+  .tl-zh{font-size:12px;color:var(--ink3);margin-top:2px;}
+
+  /* URL input area */
+  .vid-url-bar{padding:14px 28px;border-bottom:1px solid var(--rule);display:flex;gap:8px;align-items:center;flex-wrap:wrap;}
+  .vid-url-inp{flex:1;min-width:180px;border:1.5px solid var(--rule);background:white;font-family:'DM Mono',monospace;font-size:11px;color:var(--ink);padding:8px 12px;border-radius:4px;outline:none;transition:border-color .15s;}
+  .vid-url-inp:focus{border-color:var(--ink);}
+  .vid-url-btn{background:var(--ink);color:var(--cream);border:none;padding:8px 16px;font-family:'DM Mono',monospace;font-size:10.5px;letter-spacing:.06em;cursor:pointer;border-radius:4px;white-space:nowrap;transition:background .15s;}
+  .vid-url-btn:hover{background:var(--red);}
+  .vid-mode-toggle{display:flex;gap:6px;}
+  .vid-mode-btn{padding:6px 12px;font-family:'DM Mono',monospace;font-size:10px;letter-spacing:.06em;border:1.5px solid var(--rule);background:none;color:var(--ink3);cursor:pointer;border-radius:3px;transition:all .15s;}
+  .vid-mode-btn.active{background:var(--ink);color:var(--cream);border-color:var(--ink);}
+  @media(max-width:600px){.vid-kicker,.word-strip,.transcript-wrap,.vid-url-bar{padding-left:16px;padding-right:16px;}}
+</style>
+</head>
+<body>
+
+<div class="masthead">
+  <div class="mast-top">
+    <div class="mast-meta">VOL. I · ISSUE <span id="issue-no">1</span><br>A2 ENGLISH · DAILY</div>
+    <div class="mast-title">The Daily <em>English</em></div>
+    <div class="mast-meta" style="text-align:right"><span id="date-str">—</span><br>20 MIN · ALL LEVELS</div>
+  </div>
+  <div class="mast-tagline">"Read it. Say it. Save it." — Click any word to look it up instantly.</div>
+</div>
+
+<div class="nav">
+  <button class="nav-btn active" onclick="switchTab('article')">📰 Article <small>Read + Vocab</small></button>
+  <button class="nav-btn" onclick="switchTab('video')">🎬 Video <small>Watch + Learn</small></button>
+  <button class="nav-btn" onclick="switchTab('dialogue')">💬 Dialogue <small id="dlg-mode-label">AI · Live</small></button>
+  <button class="nav-btn" onclick="switchTab('quiz')">✏️ Quiz <small>Daily Test</small></button>
+  <button class="nav-btn" onclick="switchTab('notebook')">📒 Notebook <small>My Words</small><span class="nb-count" id="nb-count">0</span></button>
+</div>
+
+<div class="paper">
+  <div class="day-bar">
+    <span class="day-bar-meta" id="day-meta">DAY 1</span>
+    <span class="day-bar-theme" id="day-theme">—</span>
+    <div class="day-nav">
+      <button onclick="goPrev()">◀</button>
+      <span id="day-counter">1 / 5</span>
+      <button onclick="goNext()">▶</button>
+    </div>
+  </div>
+
+  <!-- ARTICLE -->
+  <div id="panel-article" class="panel active">
+    <div class="lookup-hint">💡 點擊文章裡的任何單字，即時查詢並加入單字本</div>
+    <div class="art-wrap">
+      <div class="art-kicker" id="art-kicker"></div>
+      <div class="art-hed" id="art-hed"></div>
+      <div class="art-deck" id="art-deck"></div>
+      <div class="art-byline" id="art-byline"></div>
+      <div class="art-cols">
+        <div class="art-body" id="art-body"></div>
+        <div class="vocab-col">
+          <div class="vocab-col-head">Today's Words</div>
+          <div id="vocab-list"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- VIDEO -->
+  <div id="panel-video" class="panel">
+    <div class="vid-wrap">
+      <div class="vid-kicker">🎬 Video · Watch + Learn</div>
+
+      <!-- Mode toggle + URL bar -->
+      <div class="vid-url-bar">
+        <div class="vid-mode-toggle">
+          <button class="vid-mode-btn active" id="vmode-sim" onclick="setVidMode('sim')">✦ Story Mode</button>
+          <button class="vid-mode-btn" id="vmode-yt" onclick="setVidMode('yt')">▶ YouTube</button>
+        </div>
+        <input class="vid-url-inp" id="yt-url-inp" placeholder="Paste YouTube URL here…" style="display:none">
+        <button class="vid-url-btn" id="yt-load-btn" onclick="loadYT()" style="display:none">Load Video</button>
+      </div>
+
+      <!-- YouTube embed (hidden by default) -->
+      <div id="yt-container" class="yt-container" style="display:none">
+        <iframe id="yt-frame" class="yt-frame" allowfullscreen allow="autoplay; encrypted-media"></iframe>
+      </div>
+
+      <!-- Simulated player -->
+      <div id="sim-container">
+        <div class="sim-player" id="sim-player" onclick="togglePlay()">
+          <div class="sim-bg">
+            <div style="width:100%;height:100%;background:linear-gradient(135deg,#1a2a1a 0%,#2a3a2a 50%,#1a1a2a 100%);position:absolute;inset:0;"></div>
+            <div class="sim-bg-gradient"></div>
+            <!-- Decorative visual -->
+            <div style="position:absolute;top:20%;left:10%;font-size:clamp(40px,12vw,90px);opacity:.12;user-select:none;">🥝</div>
+            <div style="position:absolute;bottom:30%;right:8%;font-size:clamp(20px,6vw,44px);opacity:.08;user-select:none;">🌿</div>
+          </div>
+          <div class="sim-play-btn" id="sim-play-icon">▶</div>
+          <div class="sim-subtitles" id="sim-subs">
+            <div class="sub-line">
+              <div class="sub-en" id="sub-en-text">Press play to start</div>
+              <div class="sub-zh" id="sub-zh-text">按下播放開始學習</div>
+            </div>
+          </div>
+        </div>
+        <div class="vid-controls">
+          <button class="vid-play-pause" id="ctrl-play" onclick="togglePlay()">▶</button>
+          <div class="vid-prog-bg" onclick="seekVideo(event)">
+            <div class="vid-prog-fill" id="vid-prog"></div>
+          </div>
+          <span class="vid-time" id="vid-time-display">0:00 / 0:00</span>
+        </div>
+      </div>
+
+      <!-- Key words strip -->
+      <div class="word-strip">
+        <div class="word-strip-label">✦ Key words in this clip — click to save</div>
+        <div class="word-pills-row" id="vid-word-pills"></div>
+      </div>
+
+      <!-- Transcript -->
+      <div class="transcript-wrap">
+        <div class="transcript-head" onclick="toggleTranscript()">
+          Full Transcript
+          <span class="transcript-toggle" id="tx-toggle">▼ show</span>
+        </div>
+        <div id="transcript-lines" style="display:none">
+          <div class="transcript-lines" id="tx-list"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- DIALOGUE -->
+  <div id="panel-dialogue" class="panel">
+    <div class="dlg-wrap" id="dlg-content">
+      <div class="ai-loading"><div class="spinner"></div><p>Ready to generate dialogue…</p></div>
+    </div>
+  </div>
+
+  <!-- QUIZ -->
+  <div id="panel-quiz" class="panel">
+    <div class="quiz-wrap">
+      <div class="q-head">Today's Vocabulary Quiz</div>
+      <div class="q-items" id="q-items"></div>
+      <button class="q-btn" onclick="checkQuiz()">Check Answers</button>
+      <div class="q-result" id="q-result"></div>
+    </div>
+  </div>
+
+  <!-- NOTEBOOK -->
+  <div id="panel-notebook" class="panel">
+    <div class="nb-wrap">
+      <div class="nb-header">
+        <div class="nb-title">📒 My Word Notebook</div>
+        <div class="nb-actions">
+          <button class="nb-btn" onclick="exportNotebook()">⬇ Export</button>
+          <button class="nb-btn danger" onclick="clearNotebook()">✕ Clear All</button>
+        </div>
+      </div>
+      <div class="nb-stats" id="nb-stats"></div>
+      <input class="nb-search" id="nb-search" placeholder="Search your words…" oninput="renderNotebook()">
+      <div id="nb-grid"></div>
+    </div>
+  </div>
+</div>
+
+<div class="footer">
+  <span>TODAY'S PROGRESS</span>
+  <div class="prog-dots">
+    <div class="pdot now" id="pd-article"></div>
+    <div class="pdot" id="pd-video"></div>
+    <div class="pdot" id="pd-dialogue"></div>
+    <div class="pdot" id="pd-quiz"></div>
+  </div>
+  <span class="done-badge" id="done-badge">✓ Day Complete!</span>
+  <span id="footer-hint" style="color:rgba(255,255,255,.35)">Complete all 3 sections</span>
+</div>
+
+<!-- WORD POPUP -->
+<div class="wp" id="wp">
+  <button class="wp-close" onclick="closeWP()">×</button>
+  <div class="wp-word" id="wp-word"></div>
+  <div class="wp-pron" id="wp-pron"></div>
+  <div class="wp-zh" id="wp-zh"></div>
+  <div class="wp-eg" id="wp-eg"></div>
+  <div class="wp-actions">
+    <button class="wp-save-btn" id="wp-save" onclick="saveCurrentWord()">＋ Add to Notebook</button>
+    <button class="wp-dismiss" onclick="closeWP()">Close</button>
+  </div>
+</div>
+
+<!-- TOAST -->
+<div class="toast" id="toast"></div>
+
+<script>
+// ══════════════════════════════════════════════════════
+//  CONTENT DATA
+// ══════════════════════════════════════════════════════
+const DAYS = [
+  {
+    day:1, theme:"Morning Routines",
+    article:{
+      kicker:"Everyday Life · Habits",
+      hed:"The Perfect Morning: How People Start Their Day",
+      deck:"From coffee lovers to early risers, everyone has a morning ritual. Let's explore what a typical morning looks like in English.",
+      byline:"A2 LEVEL · 3-MINUTE READ · TOPIC: DAILY LIFE",
+      body:`<p>Every morning, millions of people around the world wake up and begin their day in different ways. Some people <span class="hw" data-word="set an alarm" data-pron="/sɛt ən əˈlɑːrm/" data-zh="設定鬧鐘" data-eg="I set an alarm for 7 a.m. every day.">set an alarm</span> for 6 a.m. Others prefer to <span class="hw" data-word="sleep in" data-pron="/sliːp ɪn/" data-zh="睡懶覺、賴床" data-eg="On Sundays, I love to sleep in.">sleep in</span> until 8 or 9.</p>
+<p>After waking up, most people <span class="hw" data-word="brush their teeth" data-pron="/brʌʃ ðɛr tiːθ/" data-zh="刷牙" data-eg="I brush my teeth twice a day.">brush their teeth</span> and wash their face. Then comes breakfast. Many people say it is the most important meal of the day.</p>
+<p>In Taiwan, many people eat at a <span class="hw" data-word="breakfast shop" data-pron="/ˈbrɛkfəst ʃɒp/" data-zh="早餐店" data-eg="There's a great breakfast shop near my office.">breakfast shop</span>. In the UK, people often eat toast. In the USA, <span class="hw" data-word="cereal" data-pron="/ˈsɪəriəl/" data-zh="穀物早餐（麥片等）" data-eg="I have cereal with cold milk every morning.">cereal</span> or pancakes are popular.</p>
+<p>After breakfast, people <span class="hw" data-word="commute" data-pron="/kəˈmjuːt/" data-zh="通勤" data-eg="My commute takes 30 minutes.">commute</span> to work or school. A good morning <span class="hw" data-word="ritual" data-pron="/ˈrɪtʃuəl/" data-zh="儀式感、固定習慣" data-eg="My morning ritual is coffee and a short walk.">ritual</span> helps you feel <span class="hw" data-word="energized" data-pron="/ˈɛnərˌdʒaɪzd/" data-zh="精力充沛的" data-eg="Coffee makes me feel energized.">energized</span> all day.</p>`
+    },
+    vocab:[
+      {word:"set an alarm",pron:"/sɛt ən əˈlɑːrm/",zh:"設定鬧鐘",eg:"I set an alarm for 7 a.m. every day."},
+      {word:"sleep in",pron:"/sliːp ɪn/",zh:"睡懶覺、賴床",eg:"On Sundays, I love to sleep in."},
+      {word:"ritual",pron:"/ˈrɪtʃuəl/",zh:"儀式感、固定習慣",eg:"My morning ritual is coffee and a short walk."},
+      {word:"commute",pron:"/kəˈmjuːt/",zh:"通勤",eg:"My commute takes 30 minutes."},
+      {word:"energized",pron:"/ˈɛnərˌdʒaɪzd/",zh:"精力充沛的",eg:"Coffee makes me feel energized."},
+    ],
+    dlgMode:"script",
+    dlgContext:"Two colleagues meet in the office kitchen on Monday morning."
+  },
+  {
+    day:2, theme:"Ordering Food",
+    article:{
+      kicker:"Food & Dining · Real-Life English",
+      hed:"How to Order Food Like a Local",
+      deck:"Eating out in an English-speaking country? A few key phrases will help you order with total confidence.",
+      byline:"A2 LEVEL · 3-MINUTE READ · TOPIC: RESTAURANTS",
+      body:`<p>Going to a restaurant in an English-speaking country can feel <span class="hw" data-word="nerve-wracking" data-pron="/ˈnɜːrv ˌrækɪŋ/" data-zh="令人緊張的" data-eg="Speaking English is nerve-wracking at first.">nerve-wracking</span> at first. But with a few phrases, you can order like a pro.</p>
+<p>When you arrive, a <span class="hw" data-word="server" data-pron="/ˈsɜːrvər/" data-zh="服務員（美式）" data-eg="The server was very friendly.">server</span> will greet you. You can say: <em>"Just water, please"</em> or <em>"I'll have an iced tea."</em></p>
+<p>When you are ready, say: <em>"I'd like the chicken sandwich"</em> or <em>"Can I get the pasta?"</em> If you are not sure, ask: <em>"What do you <span class="hw" data-word="recommend" data-pron="/ˌrɛkəˈmɛnd/" data-zh="推薦" data-eg="What do you recommend here?">recommend</span>?"</em></p>
+<p>At the end, the server brings the <span class="hw" data-word="check" data-pron="/tʃɛk/" data-zh="帳單（美式，英式叫 bill）" data-eg="Can we have the check, please?">check</span>. In the USA, it is <span class="hw" data-word="customary" data-pron="/ˈkʌstəˌmɛri/" data-zh="慣例的、習俗上的" data-eg="It's customary to tip in the USA.">customary</span> to tip 15–20%.</p>`
+    },
+    vocab:[
+      {word:"nerve-wracking",pron:"/ˈnɜːrv ˌrækɪŋ/",zh:"令人緊張的",eg:"Speaking English is nerve-wracking at first."},
+      {word:"server",pron:"/ˈsɜːrvər/",zh:"服務員（美式）",eg:"The server was very friendly."},
+      {word:"recommend",pron:"/ˌrɛkəˈmɛnd/",zh:"推薦",eg:"What do you recommend here?"},
+      {word:"check",pron:"/tʃɛk/",zh:"帳單（美式）",eg:"Can we have the check, please?"},
+      {word:"customary",pron:"/ˈkʌstəˌmɛri/",zh:"慣例的",eg:"It's customary to tip in the USA."},
+    ],
+    dlgMode:"roleplay",
+    dlgContext:"You are a customer at a café. The AI plays the staff. Order a meal naturally."
+  },
+  {
+    day:3, theme:"Making Plans",
+    article:{
+      kicker:"Social Life · Invitations",
+      hed:"Let's Make Plans: Inviting, Accepting & Declining",
+      deck:"One of the most common conversations in English is making plans with friends. Learn to invite, accept, and politely say no.",
+      byline:"A2 LEVEL · 3-MINUTE READ · TOPIC: SOCIAL LIFE",
+      body:`<p>In English, making plans is a very natural part of <span class="hw" data-word="social life" data-pron="/ˈsoʊʃəl laɪf/" data-zh="社交生活" data-eg="She has a very active social life.">social life</span>. Knowing how to invite someone and <span class="hw" data-word="decline" data-pron="/dɪˈklaɪn/" data-zh="婉拒" data-eg="She had to decline the invitation.">decline</span> politely is essential.</p>
+<p>To invite someone: <em>"Do you want to <span class="hw" data-word="hang out" data-pron="/hæŋ aʊt/" data-zh="出去玩、聚一聚" data-eg="Let's hang out this Saturday!">hang out</span> this weekend?"</em> or <em>"Are you free on Saturday?"</em></p>
+<p>To say yes: <em>"That sounds great!"</em> or <em>"<span class="hw" data-word="Count me in" data-pron="/kaʊnt miː ɪn/" data-zh="算我一個！" data-eg="A picnic? Count me in!">Count me in</span>!"</em> To say no politely: <em>"I wish I could, but I already have plans."</em></p>
+<p>You can also <span class="hw" data-word="suggest" data-pron="/səˈdʒɛst/" data-zh="建議" data-eg="Can you suggest a good place?">suggest</span> another time: <em>"How about next weekend?"</em> This shows you still want to <span class="hw" data-word="catch up" data-pron="/kætʃ ʌp/" data-zh="敘舊、重新聯絡" data-eg="We should catch up over coffee.">catch up</span>.</p>`
+    },
+    vocab:[
+      {word:"hang out",pron:"/hæŋ aʊt/",zh:"出去玩、聚一聚",eg:"Let's hang out this Saturday!"},
+      {word:"decline",pron:"/dɪˈklaɪn/",zh:"婉拒",eg:"She had to decline the invitation."},
+      {word:"count me in",pron:"/kaʊnt miː ɪn/",zh:"算我一個！",eg:"A picnic? Count me in!"},
+      {word:"suggest",pron:"/səˈdʒɛst/",zh:"建議",eg:"Can you suggest a good place?"},
+      {word:"catch up",pron:"/kætʃ ʌp/",zh:"敘舊、重新聯絡",eg:"We should catch up over coffee."},
+    ],
+    dlgMode:"situation",
+    dlgContext:"Read each situation. Write what you would say in English, then reveal the natural answer."
+  },
+  {
+    day:4, theme:"Giving Directions",
+    article:{
+      kicker:"Getting Around · Navigation",
+      hed:"Excuse Me — How Do I Get There?",
+      deck:"Asking for and giving directions is one of the most practical skills in English. These phrases will get you anywhere.",
+      byline:"A2 LEVEL · 3-MINUTE READ · TOPIC: NAVIGATION",
+      body:`<p>Whether you are in a new city or helping a tourist, knowing how to give <span class="hw" data-word="directions" data-pron="/dɪˈrɛkʃənz/" data-zh="方向、路線指引" data-eg="Can you give me directions to the park?">directions</span> is very useful.</p>
+<p>To ask: <em>"Excuse me, how do I get to the train station?"</em> or <em>"Is there a pharmacy <span class="hw" data-word="nearby" data-pron="/ˈnɪərˌbaɪ/" data-zh="附近" data-eg="Is there a coffee shop nearby?">nearby</span>?"</em></p>
+<p>To answer: <em>"<span class="hw" data-word="Go straight" data-pron="/ɡoʊ streɪt/" data-zh="直走" data-eg="Go straight for about 5 minutes.">Go straight</span> for two blocks."</em> <em>"Turn left at the traffic light."</em> <em>"It's <span class="hw" data-word="next to" data-pron="/ˈnɛkst tuː/" data-zh="在⋯旁邊" data-eg="The bank is next to the post office.">next to</span> the supermarket."</em></p>
+<p>If you are not sure, say: <em>"I'm sorry, I'm not from around here."</em> This is honest and <span class="hw" data-word="polite" data-pron="/pəˈlaɪt/" data-zh="有禮貌的" data-eg="It's polite to say thank you.">polite</span>.</p>`
+    },
+    vocab:[
+      {word:"directions",pron:"/dɪˈrɛkʃənz/",zh:"方向、路線指引",eg:"Can you give me directions to the park?"},
+      {word:"nearby",pron:"/ˈnɪərˌbaɪ/",zh:"附近",eg:"Is there a coffee shop nearby?"},
+      {word:"go straight",pron:"/ɡoʊ streɪt/",zh:"直走",eg:"Go straight for about 5 minutes."},
+      {word:"next to",pron:"/ˈnɛkst tuː/",zh:"在⋯旁邊",eg:"The bank is next to the post office."},
+      {word:"polite",pron:"/pəˈlaɪt/",zh:"有禮貌的",eg:"It's polite to say thank you."},
+    ],
+    dlgMode:"roleplay",
+    dlgContext:"You are a tourist asking for directions. The AI plays a local. Find the train station."
+  },
+  {
+    day:5, theme:"Talking About the Past",
+    article:{
+      kicker:"Grammar in Action · Past Tense",
+      hed:"What Did You Do Last Weekend?",
+      deck:"The past simple tense is one of the most used grammar points in English. Learn to talk about last week's events naturally.",
+      byline:"A2 LEVEL · 3-MINUTE READ · TOPIC: GRAMMAR + LIFE",
+      body:`<p>In English, we use the <span class="hw" data-word="past simple" data-pron="/pæst ˈsɪmpəl/" data-zh="過去簡單式" data-eg="I used the past simple to describe yesterday.">past simple</span> to talk about finished events. For most verbs, just add <em>-ed</em>.</p>
+<p>Regular: <em>I <strong>worked</strong> yesterday. She <strong>cooked</strong> dinner. We <strong>watched</strong> a movie.</em></p>
+<p><span class="hw" data-word="Irregular verbs" data-pron="/ɪˈrɛɡjʊlər vɜːrbz/" data-zh="不規則動詞" data-eg="Eat→ate, go→went, sleep→slept are all irregular verbs.">Irregular verbs</span> change completely: <em>I <strong>ate</strong> pizza. He <strong>went</strong> to the gym. They <strong>slept</strong> late.</em> These must be <span class="hw" data-word="memorised" data-pron="/ˈmɛməˌraɪzd/" data-zh="背起來的、記住的" data-eg="These verbs need to be memorised.">memorised</span>.</p>
+<p>To ask about the past: <em>"What did you do last weekend?"</em> Adding a detail sounds more <span class="hw" data-word="fluent" data-pron="/ˈfluːənt/" data-zh="流利的" data-eg="She speaks fluent English.">fluent</span>: <em>"I went hiking — and we got totally lost!"</em></p>`
+    },
+    vocab:[
+      {word:"past simple",pron:"/pæst ˈsɪmpəl/",zh:"過去簡單式",eg:"I used the past simple to describe yesterday."},
+      {word:"irregular verbs",pron:"/ɪˈrɛɡjʊlər vɜːrbz/",zh:"不規則動詞",eg:"Eat→ate, go→went are irregular verbs."},
+      {word:"memorise",pron:"/ˈmɛməˌraɪz/",zh:"背起來、記住",eg:"You need to memorise irregular verbs."},
+      {word:"fluent",pron:"/ˈfluːənt/",zh:"流利的",eg:"She speaks fluent English."},
+      {word:"went",pron:"/wɛnt/",zh:"去了（go的過去式）",eg:"She went to the beach last Sunday."},
+    ],
+    dlgMode:"script",
+    dlgContext:"Two friends catch up and talk about what they did last weekend."
+  }
+];
+
+// ══════════════════════════════════════════════════════
+//  STORAGE — localStorage (works in Safari, Chrome, any browser)
+// ══════════════════════════════════════════════════════
+const STORAGE_KEY = 'daily-english-notebook';
+
+async function loadNotebook() {
+  try {
+    const raw = localStorage.getItem(STORAGE_KEY);
+    return raw ? JSON.parse(raw) : [];
+  } catch(e) { return []; }
+}
+
+async function saveNotebook(words) {
+  try {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(words));
+  } catch(e) { console.warn('Storage save failed', e); }
+}
+
+async function addWord(entry) {
+  const nb = await loadNotebook();
+  const exists = nb.find(w => w.word.toLowerCase() === entry.word.toLowerCase());
+  if (exists) { showToast('Already in your notebook!'); return false; }
+  nb.unshift({ ...entry, savedAt: Date.now(), day: DAYS[cur].day });
+  await saveNotebook(nb);
+  updateNBCount(nb.length);
+  return true;
+}
+
+async function removeWord(word) {
+  const nb = await loadNotebook();
+  const updated = nb.filter(w => w.word !== word);
+  await saveNotebook(updated);
+  updateNBCount(updated.length);
+  renderNotebook();
+}
+
+function updateNBCount(n) {
+  document.getElementById('nb-count').textContent = n;
+}
+
+// ══════════════════════════════════════════════════════
+//  STATE
+// ══════════════════════════════════════════════════════
+let cur = 0;
+let done = {article:false, video:false, dialogue:false, quiz:false};
+let dlgGenerated = false;
+let rpHistory = [];
+let currentPopupWord = null;
+
+// ══════════════════════════════════════════════════════
+//  INIT
+// ══════════════════════════════════════════════════════
+document.getElementById('date-str').textContent =
+  new Date().toLocaleDateString('en-US',{weekday:'long',month:'long',day:'numeric',year:'numeric'});
+
+(async () => {
+  const nb = await loadNotebook();
+  updateNBCount(nb.length);
+  renderDay();
+})();
+
+// ══════════════════════════════════════════════════════
+//  RENDER DAY
+// ══════════════════════════════════════════════════════
+function renderDay() {
+  const d = DAYS[cur];
+  document.getElementById('issue-no').textContent = d.day;
+  document.getElementById('day-meta').textContent = `DAY ${d.day}`;
+  document.getElementById('day-theme').textContent = d.theme;
+  document.getElementById('day-counter').textContent = `${cur+1} / ${DAYS.length}`;
+  document.getElementById('dlg-mode-label').textContent =
+    {script:'Script + Shadow', roleplay:'Roleplay · AI Live', situation:'Situation · AI Live'}[d.dlgMode];
+
+  document.getElementById('art-kicker').textContent = d.article.kicker;
+  document.getElementById('art-hed').textContent = d.article.hed;
+  document.getElementById('art-deck').textContent = d.article.deck;
+  document.getElementById('art-byline').textContent = d.article.byline;
+  document.getElementById('art-body').innerHTML = d.article.body;
+
+  // make ALL words in article clickable
+  makeWordsClickable();
+
+  // curated vocab sidebar — auto-save on render
+  document.getElementById('vocab-list').innerHTML = d.vocab.map(v=>`
+    <div class="ve" onclick="openPopup('${v.word}','${v.pron}','${v.zh}','${v.eg}')">
+      <div class="ve-word">${v.word}</div>
+      <div class="ve-pron">${v.pron}</div>
+      <div class="ve-zh">${v.zh}</div>
+      <div class="ve-eg">"${v.eg}"</div>
+    </div>`).join('');
+  autoSaveCurated(d.vocab);
+
+  // quiz
+  document.getElementById('q-items').innerHTML = d.vocab.slice(0,4).map((v,i)=>`
+    <div class="q-row">
+      <span class="q-zh">${v.zh}</span>
+      <input class="q-inp" id="qi${i}" data-ans="${v.word}" placeholder="English…">
+    </div>`).join('');
+  document.getElementById('q-result').style.display='none';
+  document.querySelectorAll('.q-inp').forEach(el=>{el.classList.remove('ok','no');el.value='';});
+
+  dlgGenerated = false;
+  rpHistory = [];
+  document.getElementById('dlg-content').innerHTML =
+    `<div class="ai-loading"><div class="spinner"></div><p>Ready — open Dialogue to generate</p></div>`;
+
+  done = {article:false, video:false, dialogue:false, quiz:false};
+  updateProgress();
+  switchTab('article');
+}
+
+// Auto-save today's curated words silently
+async function autoSaveCurated(vocab) {
+  for (const v of vocab) {
+    const nb = await loadNotebook();
+    if (!nb.find(w => w.word.toLowerCase() === v.word.toLowerCase())) {
+      nb.push({ ...v, savedAt: Date.now(), day: DAYS[cur].day, auto: true });
+      await saveNotebook(nb);
+      updateNBCount(nb.length);
+    }
+  }
+}
+
+// ══════════════════════════════════════════════════════
+//  CLICK-ANY-WORD LOOKUP
+// ══════════════════════════════════════════════════════
+function makeWordsClickable() {
+  const body = document.getElementById('art-body');
+  // hw spans already have data attrs — attach listener
+  body.querySelectorAll('.hw').forEach(el => {
+    el.onclick = () => openPopup(
+      el.dataset.word, el.dataset.pron, el.dataset.zh, el.dataset.eg
+    );
+  });
+
+  // wrap plain text words for click-to-lookup
+  body.querySelectorAll('p').forEach(p => {
+    p.childNodes.forEach(node => {
+      if (node.nodeType === 3 && node.textContent.trim()) {
+        const frag = document.createDocumentFragment();
+        node.textContent.split(/(\s+)/).forEach(part => {
+          if (/\w/.test(part)) {
+            const clean = part.replace(/[^a-zA-Z'-]/g,'');
+            if (clean.length > 1) {
+              const sp = document.createElement('span');
+              sp.className = 'w';
+              sp.textContent = part;
+              sp.onclick = () => lookupWord(clean);
+              frag.appendChild(sp);
+            } else {
+              frag.appendChild(document.createTextNode(part));
+            }
+          } else {
+            frag.appendChild(document.createTextNode(part));
+          }
+        });
+        node.replaceWith(frag);
+      }
+    });
+  });
+}
+
+// Lookup unknown word via Claude API
+async function lookupWord(word) {
+  openPopupLoading(word);
+  try {
+    const res = await fetch("https://api.anthropic.com/v1/messages", {
+      method:"POST",
+      headers:{"Content-Type":"application/json"},
+      body: JSON.stringify({
+        model:"claude-sonnet-4-20250514",
+        max_tokens:200,
+        system:`You are a concise English dictionary for A2 Taiwanese learners. Return ONLY valid JSON, no markdown:
+{"word":"exact word","pron":"IPA pronunciation","zh":"Traditional Chinese meaning (concise)","eg":"One short natural example sentence"}`,
+        messages:[{role:"user",content:`Look up: "${word}"`}]
+      })
+    });
+    const data = await res.json();
+    const text = data.content?.[0]?.text || '{}';
+    const info = JSON.parse(text.replace(/```json|```/g,'').trim());
+    openPopup(info.word||word, info.pron||'', info.zh||'—', info.eg||'');
+  } catch(e) {
+    openPopup(word, '', '查詢失敗，請再試一次', '');
+  }
+}
+
+// ══════════════════════════════════════════════════════
+//  WORD POPUP
+// ══════════════════════════════════════════════════════
+function openPopupLoading(word) {
+  currentPopupWord = null;
+  document.getElementById('wp-word').textContent = word;
+  document.getElementById('wp-pron').textContent = '';
+  document.getElementById('wp-zh').innerHTML = '<div class="wp-loading">Looking up…</div>';
+  document.getElementById('wp-eg').textContent = '';
+  document.getElementById('wp-save').textContent = '＋ Add to Notebook';
+  document.getElementById('wp-save').className = 'wp-save-btn';
+  document.getElementById('wp').classList.add('show');
+}
+
+async function openPopup(word, pron, zh, eg) {
+  currentPopupWord = {word, pron, zh, eg};
+  document.getElementById('wp-word').textContent = word;
+  document.getElementById('wp-pron').textContent = pron;
+  document.getElementById('wp-zh').textContent = zh;
+  document.getElementById('wp-eg').textContent = eg ? `"${eg}"` : '';
+  // check if already saved
+  const nb = await loadNotebook();
+  const saved = nb.find(w => w.word.toLowerCase() === word.toLowerCase());
+  const btn = document.getElementById('wp-save');
+  btn.textContent = saved ? '✓ Saved' : '＋ Add to Notebook';
+  btn.className = 'wp-save-btn' + (saved ? ' saved' : '');
+  document.getElementById('wp').classList.add('show');
+}
+
+async function saveCurrentWord() {
+  if (!currentPopupWord) return;
+  const saved = await addWord(currentPopupWord);
+  if (saved) {
+    document.getElementById('wp-save').textContent = '✓ Saved';
+    document.getElementById('wp-save').className = 'wp-save-btn saved';
+    showToast(`"${currentPopupWord.word}" added to notebook!`);
+  }
+}
+
+function closeWP() { document.getElementById('wp').classList.remove('show'); }
+document.addEventListener('click', e => {
+  if (!e.target.closest('#wp') && !e.target.closest('.hw') && !e.target.closest('.w') && !e.target.closest('.ve')) closeWP();
+});
+
+// ══════════════════════════════════════════════════════
+//  NOTEBOOK RENDER
+// ══════════════════════════════════════════════════════
+async function renderNotebook() {
+  const nb = await loadNotebook();
+  const q = (document.getElementById('nb-search').value||'').toLowerCase();
+  const filtered = q ? nb.filter(w => w.word.toLowerCase().includes(q) || w.zh.includes(q)) : nb;
+
+  // stats
+  const days = [...new Set(nb.map(w=>w.day))].length;
+  document.getElementById('nb-stats').innerHTML = `
+    <div class="nb-stat"><strong>${nb.length}</strong>Total Words</div>
+    <div class="nb-stat"><strong>${days}</strong>Days Studied</div>
+    <div class="nb-stat"><strong>${nb.filter(w=>w.auto).length}</strong>Auto-saved</div>
+    <div class="nb-stat"><strong>${nb.filter(w=>!w.auto).length}</strong>Self-looked Up</div>`;
+
+  if (!filtered.length) {
+    document.getElementById('nb-grid').innerHTML = `<div class="nb-empty"><span>📒</span>${q?'No matches found.':'Your notebook is empty. Start reading and tap words to save them!'}</div>`;
+    return;
+  }
+
+  document.getElementById('nb-grid').innerHTML = filtered.map(w=>`
+    <div class="nb-card">
+      <button class="nb-card-del" onclick="removeWord('${w.word.replace(/'/g,"\\'")}')">×</button>
+      <div class="nb-card-word">${w.word}</div>
+      <div class="nb-card-pron">${w.pron||''}</div>
+      <div class="nb-card-zh">${w.zh}</div>
+      <div class="nb-card-eg">"${w.eg||''}"</div>
+      <div class="nb-card-day">Day ${w.day||'?'} · ${w.auto?'精選':'自查'}</div>
+    </div>`).join('');
+}
+
+async function clearNotebook() {
+  if (!confirm('Clear all saved words? This cannot be undone.')) return;
+  await saveNotebook([]);
+  updateNBCount(0);
+  renderNotebook();
+}
+
+async function exportNotebook() {
+  const nb = await loadNotebook();
+  const text = nb.map(w=>`${w.word}\t${w.pron}\t${w.zh}\t${w.eg}`).join('\n');
+  const blob = new Blob([text], {type:'text/plain'});
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = 'my-english-notebook.txt';
+  a.click();
+}
+
+// ══════════════════════════════════════════════════════
+//  QUIZ
+// ══════════════════════════════════════════════════════
+function checkQuiz() {
+  let ok=0;
+  DAYS[cur].vocab.slice(0,4).forEach((v,i)=>{
+    const inp=document.getElementById(`qi${i}`);
+    const val=inp.value.trim().toLowerCase();
+    const ans=v.word.toLowerCase();
+    const correct=val===ans||(val.length>3&&ans.includes(val));
+    inp.classList.toggle('ok',correct); inp.classList.toggle('no',!correct);
+    if(!correct) inp.placeholder=v.word;
+    if(correct) ok++;
+  });
+  const pct=Math.round(ok/4*100);
+  const res=document.getElementById('q-result');
+  res.textContent=`${ok}/4 correct (${pct}%) ${pct===100?'— Perfect! 🌟':pct>=75?'— Great! 💪':'— Keep going!'}`;
+  res.style.display='block';
+  done.quiz=true; updateProgress();
+}
+
+// ══════════════════════════════════════════════════════
+//  DIALOGUE — AI GENERATION
+// ══════════════════════════════════════════════════════
+async function callClaude(messages, system) {
+  const res = await fetch("https://api.anthropic.com/v1/messages",{
+    method:"POST", headers:{"Content-Type":"application/json"},
+    body: JSON.stringify({model:"claude-sonnet-4-20250514",max_tokens:1000,system,messages})
+  });
+  const data = await res.json();
+  return data.content?.[0]?.text||'';
+}
+
+async function generateDialogue() {
+  dlgGenerated = true;
+  const d = DAYS[cur];
+  const vocab = d.vocab.map(v=>v.word).join(', ');
+  const el = document.getElementById('dlg-content');
+  el.innerHTML=`<div class="ai-loading"><div class="spinner"></div><p>AI is writing today's dialogue…</p></div>`;
+  try {
+    if (d.dlgMode==='script') await generateScript(d,vocab,el);
+    else if (d.dlgMode==='roleplay') await generateRoleplay(d,vocab,el);
+    else await generateSituation(d,vocab,el);
+    done.dialogue=true; updateProgress();
+  } catch(e) {
+    el.innerHTML=`<div class="dlg-wrap"><p style="color:var(--ink3);font-style:italic;font-size:14px">Could not generate dialogue. Check your connection.</p>
+    <button class="dlg-btn" style="margin-top:12px" onclick="dlgGenerated=false;generateDialogue()">Retry</button></div>`;
+  }
+}
+
+async function generateScript(d,vocab,el) {
+  const sys=`You are an English teaching assistant. Return ONLY valid JSON, no markdown:
+{"scene":"scene description","lines":[{"speaker":"A","en":"English line","zh":"Traditional Chinese translation"}]}`;
+  const raw=await callClaude([{role:"user",content:`Topic:"${d.theme}". Context:${d.dlgContext}. Use 2+ of: ${vocab}. Generate 6 lines alternating A/B. A2 level English. Natural Traditional Chinese.`}],sys);
+  const json=JSON.parse(raw.replace(/```json|```/g,'').trim());
+  el.innerHTML=`<div class="dlg-wrap">
+    <div class="dlg-badge">💬 Script Mode · AI Generated</div>
+    <div class="dlg-scene">${json.scene}</div>
+    <div class="dlg-ctx">${d.dlgContext}<br><span style="font-size:11px;font-family:'DM Mono',monospace;color:var(--gold)">✦ Shadow Mode: click hidden text to reveal</span></div>
+    <div class="script-lines" id="sl">
+      ${json.lines.map(l=>`<div class="sl ${l.speaker}">
+        <div class="sl-spk">${l.speaker}</div>
+        <div><div class="sl-en" onclick="this.classList.add('shown')">${l.en}</div>
+        <div class="sl-zh">${l.zh}</div></div></div>`).join('')}
+    </div>
+    <div class="dlg-actions">
+      <button class="dlg-btn" onclick="document.getElementById('sl').classList.toggle('shadow')">🙈 Shadow Mode</button>
+      <button class="dlg-btn" onclick="document.getElementById('sl').classList.remove('shadow');document.querySelectorAll('.sl-en').forEach(e=>e.classList.add('shown'))">👁 Reveal All</button>
+      <button class="dlg-btn" onclick="dlgGenerated=false;generateDialogue()">🔄 New Version</button>
+    </div></div>`;
+}
+
+async function generateRoleplay(d,vocab,el) {
+  const sys=`You are playing a character in an English roleplay for an A2 learner. Context: ${d.dlgContext}. Vocab to use: ${vocab}. Keep replies 1-2 sentences. Simple English. Stay in character.`;
+  const opening=await callClaude([{role:"user",content:"Generate your character's opening line to start the conversation. Just the line."}],sys);
+  const label=d.dlgContext.includes('café')?'CAFÉ STAFF':d.dlgContext.includes('local')?'LOCAL RESIDENT':'CONVERSATION PARTNER';
+  rpHistory=[{role:"assistant",content:opening}];
+  window._rpSys=sys; window._rpLabel=label;
+  el.innerHTML=`<div class="dlg-wrap">
+    <div class="dlg-badge">🎭 Roleplay · Live AI · ${label}</div>
+    <div class="dlg-scene">${d.theme}</div>
+    <div class="dlg-ctx">${d.dlgContext}</div>
+    <div class="rp-chat" id="rp-chat"><div class="bubble ai"><small>${label}</small>${opening}</div></div>
+    <div class="rp-thinking" id="rp-thinking">typing…</div>
+    <div class="rp-input-row">
+      <textarea class="rp-input" id="rp-inp" placeholder="Type your reply in English…" rows="2"
+        onkeydown="if(event.key==='Enter'&&!event.shiftKey){event.preventDefault();sendRP();}"></textarea>
+      <button class="rp-send" onclick="sendRP()">Send ↵</button>
+    </div>
+    <span class="hint-toggle" onclick="document.getElementById('rp-hint').classList.toggle('show')">💡 Show vocabulary hints</span>
+    <div class="hint-box" id="rp-hint">${d.vocab.map(v=>`<div><strong>${v.word}</strong> — ${v.zh}: "${v.eg}"</div>`).join('')}</div>
+  </div>`;
+}
+
+async function sendRP() {
+  const inp=document.getElementById('rp-inp');
+  const text=inp.value.trim(); if(!text) return;
+  const chat=document.getElementById('rp-chat');
+  chat.innerHTML+=`<div class="bubble user"><small>YOU</small>${text}</div>`;
+  inp.value=''; inp.disabled=true;
+  rpHistory.push({role:"user",content:text});
+  document.getElementById('rp-thinking').style.display='block';
+  try {
+    const reply=await callClaude(rpHistory,window._rpSys);
+    document.getElementById('rp-thinking').style.display='none';
+    rpHistory.push({role:"assistant",content:reply});
+    chat.innerHTML+=`<div class="bubble ai"><small>${window._rpLabel}</small>${reply}</div>`;
+    chat.scrollTop=chat.scrollHeight;
+  } catch(e) {
+    document.getElementById('rp-thinking').style.display='none';
+    chat.innerHTML+=`<div class="bubble ai" style="opacity:.5"><small>ERROR</small>Could not connect. Try again.</div>`;
+  }
+  inp.disabled=false; inp.focus();
+}
+
+async function generateSituation(d,vocab,el) {
+  const sys=`You are an English teaching assistant creating situation cards for A2 learners. Return ONLY valid JSON:
+{"situations":[{"prompt":"Situation in Traditional Chinese with emoji","answer":"Natural English answer","note":"Brief Traditional Chinese explanation"}]}`;
+  const raw=await callClaude([{role:"user",content:`Topic:"${d.theme}". Vocab:${vocab}. Create 3 situations. Natural English answers. Notes in Traditional Chinese.`}],sys);
+  const json=JSON.parse(raw.replace(/```json|```/g,'').trim());
+  el.innerHTML=`<div class="dlg-wrap">
+    <div class="dlg-badge">🃏 Situation Cards · AI Generated</div>
+    <div class="dlg-scene">${d.theme} — What Would You Say?</div>
+    <div class="dlg-ctx">${d.dlgContext}</div>
+    ${json.situations.map((s,i)=>`<div class="sit-card">
+      <div class="sit-prompt">${s.prompt}</div>
+      <textarea class="sit-area" placeholder="Write your English answer here…"></textarea>
+      <button class="reveal-btn" onclick="document.getElementById('sa${i}').classList.add('show')">Reveal natural answer</button>
+      <div class="sit-ans" id="sa${i}">
+        <div class="sit-ans-en">"${s.answer}"</div>
+        <div class="sit-ans-note">💡 ${s.note}</div>
+      </div></div>`).join('')}
+    <button class="dlg-btn" style="margin-top:4px" onclick="dlgGenerated=false;generateDialogue()">🔄 New Situations</button>
+  </div>`;
+}
+
+// ══════════════════════════════════════════════════════
+//  NAV + PROGRESS + UTILS
+// ══════════════════════════════════════════════════════
+function switchTab(name) {
+  ['article','video','dialogue','quiz','notebook'].forEach((n,i)=>{
+    document.getElementById(`panel-${n}`).classList.toggle('active',n===name);
+    document.querySelectorAll('.nav-btn')[i].classList.toggle('active',n===name);
+  });
+  if (name==='article') { done.article=true; updateProgress(); }
+  if (name==='video') { initVideo(); done.video=true; updateProgress(); }
+  if (name==='dialogue' && !dlgGenerated) generateDialogue();
+  if (name==='dialogue' && dlgGenerated) { done.dialogue=true; updateProgress(); }
+  if (name==='notebook') renderNotebook();
+}
+
+function goPrev(){ if(cur>0){cur--;renderDay();} }
+function goNext(){ if(cur<DAYS.length-1){cur++;renderDay();} }
+
+function updateProgress(){
+  ['article','video','dialogue','quiz'].forEach(s=>{
+    const el=document.getElementById(`pd-${s}`);
+    if(el) el.className='pdot'+(done[s]?' done':' now');
+  });
+  const all=Object.values(done).every(Boolean);
+  document.getElementById('done-badge').style.display=all?'inline-block':'none';
+  document.getElementById('footer-hint').style.display=all?'none':'inline';
+}
+
+function showToast(msg) {
+  const t=document.getElementById('toast');
+  t.textContent=msg; t.classList.add('show');
+  setTimeout(()=>t.classList.remove('show'),2200);
+}
+
+// ══════════════════════════════════════════════════════
+//  VIDEO SYSTEM
+// ══════════════════════════════════════════════════════
+
+// Per-day simulated video clips (story mode)
+const VIDEO_DATA = [
+  { // Day 1 — Morning Routines
+    title:"A Morning in Taipei",
+    emoji:"🌅",
+    bg:"linear-gradient(135deg,#1a2030 0%,#2a3040 50%,#1a1a30 100%)",
+    deco:"☕",
+    clips:[
+      {t:0,  en:"Every morning, I wake up at 7 a.m.",      zh:"每天早上，我7點起床。",           word:null},
+      {t:4,  en:"First, I set my alarm the night before.",  zh:"首先，我前一晚設好鬧鐘。",         word:{word:"set an alarm",pron:"/sɛt ən əˈlɑːrm/",zh:"設定鬧鐘",eg:"I set an alarm for 7 a.m. every day."}},
+      {t:8,  en:"I brush my teeth and wash my face.",       zh:"我刷牙、洗臉。",                  word:{word:"brush teeth",pron:"/brʌʃ tiːθ/",zh:"刷牙",eg:"I brush my teeth twice a day."}},
+      {t:12, en:"Then I commute to work by MRT.",           zh:"然後我搭捷運通勤上班。",            word:{word:"commute",pron:"/kəˈmjuːt/",zh:"通勤",eg:"My commute takes 30 minutes."}},
+      {t:16, en:"A good morning ritual keeps me energized all day.", zh:"好的晨間慣例讓我全天精力充沛。", word:{word:"ritual",pron:"/ˈrɪtʃuəl/",zh:"儀式感、固定習慣",eg:"My morning ritual is coffee and a short walk."}},
+      {t:20, en:"What is YOUR morning routine?",            zh:"你的早晨習慣是什麼？",              word:null},
+    ]
+  },
+  { // Day 2 — Ordering Food
+    title:"At the Café",
+    emoji:"☕",
+    bg:"linear-gradient(135deg,#201510 0%,#302010 50%,#201520 100%)",
+    deco:"🍽️",
+    clips:[
+      {t:0,  en:"Welcome! What can I get for you today?",  zh:"歡迎！今天要來點什麼？",            word:null},
+      {t:4,  en:"I'll have the pasta, please.",            zh:"我要一份義大利麵，謝謝。",          word:null},
+      {t:8,  en:"What do you recommend?",                  zh:"你推薦什麼？",                     word:{word:"recommend",pron:"/ˌrɛkəˌmɛnd/",zh:"推薦",eg:"What do you recommend here?"}},
+      {t:12, en:"Our chicken sandwich is very popular.",   zh:"我們的雞肉三明治非常受歡迎。",       word:null},
+      {t:16, en:"Can we have the check, please?",          zh:"麻煩買單。",                       word:{word:"check",pron:"/tʃɛk/",zh:"帳單（美式）",eg:"Can we have the check, please?"}},
+      {t:20, en:"It's customary to tip 15–20% in the USA.",zh:"在美國，給小費15-20%是慣例。",     word:{word:"customary",pron:"/ˈkʌstəˌmɛri/",zh:"慣例的",eg:"It's customary to tip in the USA."}},
+    ]
+  },
+  { // Day 3 — Making Plans
+    title:"Weekend Plans",
+    emoji:"📅",
+    bg:"linear-gradient(135deg,#101a20 0%,#10202a 50%,#101520 100%)",
+    deco:"🌸",
+    clips:[
+      {t:0,  en:"Hey! Are you free this Saturday?",        zh:"嘿！這週六你有空嗎？",              word:null},
+      {t:4,  en:"Do you want to hang out at the park?",    zh:"想去公園玩嗎？",                   word:{word:"hang out",pron:"/hæŋ aʊt/",zh:"出去玩、聚一聚",eg:"Let's hang out this Saturday!"}},
+      {t:8,  en:"That sounds amazing! Count me in!",       zh:"聽起來太棒了！算我一個！",           word:{word:"count me in",pron:"/kaʊnt miː ɪn/",zh:"算我一個！",eg:"A picnic? Count me in!"}},
+      {t:12, en:"Sorry, I have to decline this time.",     zh:"抱歉，這次我得婉拒了。",             word:{word:"decline",pron:"/dɪˈklaɪn/",zh:"婉拒",eg:"She had to decline the invitation."}},
+      {t:16, en:"How about we catch up next weekend?",     zh:"我們下週末再敘舊怎麼樣？",           word:{word:"catch up",pron:"/kætʃ ʌp/",zh:"敘舊、重新聯絡",eg:"We should catch up over coffee."}},
+      {t:20, en:"Great idea! I'll suggest a coffee shop.", zh:"好主意！我來建議一家咖啡廳。",       word:{word:"suggest",pron:"/səˈdʒɛst/",zh:"建議",eg:"Can you suggest a good place?"}},
+    ]
+  },
+  { // Day 4 — Directions
+    title:"Excuse Me, How Do I Get There?",
+    emoji:"🗺️",
+    bg:"linear-gradient(135deg,#101820 0%,#101a18 50%,#181018 100%)",
+    deco:"📍",
+    clips:[
+      {t:0,  en:"Excuse me, is there a pharmacy nearby?",  zh:"打擾一下，附近有藥局嗎？",           word:{word:"nearby",pron:"/ˈnɪərˌbaɪ/",zh:"附近",eg:"Is there a coffee shop nearby?"}},
+      {t:4,  en:"Yes! Go straight for two blocks.",        zh:"有！直走兩個街區。",                word:{word:"go straight",pron:"/ɡoʊ streɪt/",zh:"直走",eg:"Go straight for about 5 minutes."}},
+      {t:8,  en:"Then turn left at the traffic light.",    zh:"然後在紅綠燈左轉。",                word:null},
+      {t:12, en:"It's next to the supermarket.",           zh:"就在超市旁邊。",                   word:{word:"next to",pron:"/ˈnɛkst tuː/",zh:"在⋯旁邊",eg:"The bank is next to the post office."}},
+      {t:16, en:"Sorry, I'm not from around here.",        zh:"抱歉，我不是本地人。",               word:null},
+      {t:20, en:"No worries — it's always polite to try!", zh:"沒關係——願意嘗試就很有禮貌了！",     word:{word:"polite",pron:"/pəˈlaɪt/",zh:"有禮貌的",eg:"It's polite to say thank you."}},
+    ]
+  },
+  { // Day 5 — Past Tense
+    title:"What Did You Do Last Weekend?",
+    emoji:"🏔️",
+    bg:"linear-gradient(135deg,#0a1a10 0%,#101a0a 50%,#0a100a 100%)",
+    deco:"🥾",
+    clips:[
+      {t:0,  en:"So, what did you do last weekend?",       zh:"那麼，你上週末做了什麼？",           word:null},
+      {t:4,  en:"I went hiking with my friend.",           zh:"我和朋友去爬山了。",                word:{word:"went",pron:"/wɛnt/",zh:"去了（go的過去式）",eg:"She went to the beach last Sunday."}},
+      {t:8,  en:"We ate amazing food at a local restaurant.",zh:"我們在一家當地餐廳吃了很棒的食物。",word:{word:"ate",pron:"/eɪt/",zh:"吃了（eat的過去式）",eg:"We ate at a great restaurant."}},
+      {t:12, en:"We got a little lost, but it was fun!",   zh:"我們迷路了一下，但很好玩！",         word:null},
+      {t:16, en:"You need to memorise irregular verbs.",   zh:"你需要背不規則動詞。",              word:{word:"memorise",pron:"/ˈmɛməˌraɪz/",zh:"背起來、記住",eg:"You need to memorise irregular verbs."}},
+      {t:20, en:"Practice every day and you'll sound fluent!", zh:"每天練習，你就會說得很流利！",   word:{word:"fluent",pron:"/ˈfluːənt/",zh:"流利的",eg:"She speaks fluent English."}},
+    ]
+  }
+];
+
+// Video state
+let vidMode = 'sim';
+let simTimer = null;
+let simCurClip = -1;
+let simPlaying = false;
+let simDuration = 0;
+let simElapsed = 0;
+let simTickInterval = null;
+
+function initVideo() {
+  const d = VIDEO_DATA[cur];
+  // set background
+  const simPlayer = document.getElementById('sim-player');
+  simPlayer.querySelector('.sim-bg div').style.background = d.bg;
+  simPlayer.querySelector('.sim-bg-gradient').previousElementSibling.querySelector('div:first-child') ;
+
+  // decorative emoji
+  const decos = simPlayer.querySelectorAll('[style*="position:absolute"]');
+  if (decos[0]) decos[0].textContent = d.deco;
+
+  // reset
+  stopSim();
+  simCurClip = -1;
+  simElapsed = 0;
+  simDuration = d.clips[d.clips.length-1].t + 4;
+  document.getElementById('vid-prog').style.width='0%';
+  document.getElementById('vid-time-display').textContent=`0:00 / ${fmtTime(simDuration)}`;
+  document.getElementById('sub-en-text').textContent = d.title;
+  document.getElementById('sub-zh-text').textContent = d.emoji + ' 按下播放開始';
+  document.getElementById('ctrl-play').textContent='▶';
+  document.getElementById('sim-play-icon').style.display='flex';
+
+  // word pills
+  const words = d.clips.filter(c=>c.word).map(c=>c.word);
+  document.getElementById('vid-word-pills').innerHTML = words.map(w=>`
+    <div class="word-pill" onclick="openPopup('${w.word}','${w.pron}','${w.zh}','${w.eg}')">
+      <span class="word-pill-en">${w.word}</span>
+      <span class="word-pill-zh">${w.zh}</span>
+      <span class="word-pill-save">＋</span>
+    </div>`).join('');
+
+  // transcript
+  document.getElementById('tx-list').innerHTML = d.clips.map((c,i)=>`
+    <div class="tl" id="tl-${i}" onclick="seekToClip(${i})">
+      <div class="tl-time">${fmtTime(c.t)}</div>
+      <div>
+        <div class="tl-en">${c.en}${c.word?` <span style="background:rgba(184,134,11,.2);padding:1px 6px;border-radius:10px;font-size:11px;color:var(--gold)">${c.word.word}</span>`:''}` }</div>
+        <div class="tl-zh">${c.zh}</div>
+      </div>
+    </div>`).join('');
+}
+
+function togglePlay() {
+  if (simPlaying) { stopSim(); }
+  else { startSim(); }
+}
+
+function startSim() {
+  simPlaying = true;
+  document.getElementById('ctrl-play').textContent='⏸';
+  document.getElementById('sim-play-icon').style.display='none';
+  document.getElementById('sim-player').classList.add('playing');
+  runSimTick();
+}
+
+function stopSim() {
+  simPlaying = false;
+  clearInterval(simTickInterval);
+  document.getElementById('ctrl-play').textContent='▶';
+  document.getElementById('sim-player').classList.remove('playing');
+  document.getElementById('sim-play-icon').style.display='flex';
+}
+
+function runSimTick() {
+  clearInterval(simTickInterval);
+  simTickInterval = setInterval(()=>{
+    if (!simPlaying) return;
+    simElapsed += 0.5;
+    const d = VIDEO_DATA[cur];
+    if (simElapsed >= simDuration) {
+      stopSim();
+      simElapsed = simDuration;
+      showClip(d.clips[d.clips.length-1]);
+      return;
+    }
+    // find current clip
+    let clip = d.clips[0];
+    let clipIdx = 0;
+    for (let i=0; i<d.clips.length; i++) {
+      if (simElapsed >= d.clips[i].t) { clip=d.clips[i]; clipIdx=i; }
+    }
+    if (clipIdx !== simCurClip) {
+      simCurClip = clipIdx;
+      showClip(clip, clipIdx);
+    }
+    // update progress
+    const pct = (simElapsed/simDuration)*100;
+    document.getElementById('vid-prog').style.width=pct+'%';
+    document.getElementById('vid-time-display').textContent=`${fmtTime(simElapsed)} / ${fmtTime(simDuration)}`;
+  }, 500);
+}
+
+function showClip(clip, idx) {
+  document.getElementById('sub-en-text').textContent = clip.en;
+  document.getElementById('sub-zh-text').textContent = clip.zh;
+  // highlight transcript line
+  document.querySelectorAll('.tl').forEach(el=>el.classList.remove('active'));
+  if (idx !== undefined) {
+    const tl = document.getElementById(`tl-${idx}`);
+    if (tl) { tl.classList.add('active'); tl.scrollIntoView({behavior:'smooth',block:'nearest'}); }
+  }
+  // show word pill popup briefly
+  if (clip.word) {
+    const subs = document.getElementById('sim-subs');
+    const existing = subs.querySelector('.sub-word-pill');
+    if (existing) existing.remove();
+    const pill = document.createElement('div');
+    pill.className='sub-word-pill';
+    pill.textContent=`${clip.word.word} (${clip.word.zh})`;
+    pill.onclick=(e)=>{e.stopPropagation();openPopup(clip.word.word,clip.word.pron,clip.word.zh,clip.word.eg);};
+    subs.appendChild(pill);
+  } else {
+    const existing = document.getElementById('sim-subs').querySelector('.sub-word-pill');
+    if (existing) existing.remove();
+  }
+}
+
+function seekToClip(idx) {
+  const d = VIDEO_DATA[cur];
+  simElapsed = d.clips[idx].t;
+  simCurClip = idx;
+  showClip(d.clips[idx], idx);
+  const pct=(simElapsed/simDuration)*100;
+  document.getElementById('vid-prog').style.width=pct+'%';
+  document.getElementById('vid-time-display').textContent=`${fmtTime(simElapsed)} / ${fmtTime(simDuration)}`;
+  if (!simPlaying) startSim();
+}
+
+function seekVideo(e) {
+  const bar = e.currentTarget;
+  const pct = e.offsetX / bar.offsetWidth;
+  simElapsed = pct * simDuration;
+  simCurClip = -1;
+  document.getElementById('vid-prog').style.width=(pct*100)+'%';
+  if (!simPlaying) startSim();
+}
+
+function fmtTime(s) {
+  const m=Math.floor(s/60), sec=Math.floor(s%60);
+  return `${m}:${sec.toString().padStart(2,'0')}`;
+}
+
+function toggleTranscript() {
+  const el = document.getElementById('transcript-lines');
+  const tog = document.getElementById('tx-toggle');
+  const shown = el.style.display!=='none';
+  el.style.display=shown?'none':'block';
+  tog.textContent=shown?'▼ show':'▲ hide';
+}
+
+// YouTube mode
+function setVidMode(mode) {
+  vidMode=mode;
+  document.getElementById('vmode-sim').classList.toggle('active',mode==='sim');
+  document.getElementById('vmode-yt').classList.toggle('active',mode==='yt');
+  document.getElementById('sim-container').style.display=mode==='sim'?'block':'none';
+  document.getElementById('yt-container').style.display=mode==='yt'?'block':'none';
+  document.getElementById('yt-url-inp').style.display=mode==='yt'?'flex':'none';
+  document.getElementById('yt-load-btn').style.display=mode==='yt'?'block':'none';
+  if (mode==='sim') initVideo();
+}
+
+function loadYT() {
+  const url = document.getElementById('yt-url-inp').value.trim();
+  let vid='';
+  const m = url.match(/(?:v=|youtu\.be\/)([a-zA-Z0-9_-]{11})/);
+  if (m) vid=m[1];
+  if (!vid) { showToast('Please paste a valid YouTube URL'); return; }
+  document.getElementById('yt-frame').src=`https://www.youtube.com/embed/${vid}?rel=0&modestbranding=1`;
+  document.getElementById('yt-container').style.display='block';
+  showToast('Video loaded! Watch and use Story Mode for guided vocab.');
+}
+</script>
+</body>
+</html>
