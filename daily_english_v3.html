@@ -611,9 +611,13 @@ document.getElementById('date-str').textContent =
   new Date().toLocaleDateString('en-US',{weekday:'long',month:'long',day:'numeric',year:'numeric'});
 
 (async () => {
-  const nb = await loadNotebook();
-  updateNBCount(nb.length);
-  renderDay();
+  try {
+    const nb = await loadNotebook();
+    updateNBCount(nb.length);
+  } catch(e) { console.warn('Notebook load failed', e); }
+  try {
+    renderDay();
+  } catch(e) { console.error('renderDay failed:', e); }
 })();
 
 // ══════════════════════════════════════════════════════
@@ -663,7 +667,15 @@ function renderDay() {
 
   done = {article:false, video:false, dialogue:false, quiz:false};
   updateProgress();
-  switchTab('article');
+  // directly show article tab without triggering switchTab logic
+  ['article','video','dialogue','quiz','notebook'].forEach((n,i)=>{
+    const panel = document.getElementById(`panel-${n}`);
+    const btn = document.querySelectorAll('.nav-btn')[i];
+    if(panel) panel.classList.toggle('active', n==='article');
+    if(btn) btn.classList.toggle('active', n==='article');
+  });
+  done.article = true;
+  updateProgress();
 }
 
 // Auto-save today's curated words silently
@@ -974,9 +986,12 @@ async function generateSituation(d,vocab,el) {
 //  NAV + PROGRESS + UTILS
 // ══════════════════════════════════════════════════════
 function switchTab(name) {
-  ['article','video','dialogue','quiz','notebook'].forEach((n,i)=>{
-    document.getElementById(`panel-${n}`).classList.toggle('active',n===name);
-    document.querySelectorAll('.nav-btn')[i].classList.toggle('active',n===name);
+  const tabs = ['article','video','dialogue','quiz','notebook'];
+  tabs.forEach((n,i)=>{
+    const panel = document.getElementById(`panel-${n}`);
+    const btn = document.querySelectorAll('.nav-btn')[i];
+    if(panel) panel.classList.toggle('active', n===name);
+    if(btn) btn.classList.toggle('active', n===name);
   });
   if (name==='article') { done.article=true; updateProgress(); }
   if (name==='video') { initVideo(); done.video=true; updateProgress(); }
