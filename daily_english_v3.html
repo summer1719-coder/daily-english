@@ -287,8 +287,10 @@
     <span class="day-bar-theme" id="day-theme">—</span>
     <div class="day-nav">
       <button onclick="goPrev()">◀</button>
-      <span id="day-counter">1 / 5</span>
+      <span id="day-counter">1 / 30</span>
       <button onclick="goNext()">▶</button>
+      <select id="day-picker" onchange="jumpToDay(this.value)" style="background:rgba(255,255,255,.1);color:var(--cream);border:1px solid rgba(255,255,255,.2);font-family:'DM Mono',monospace;font-size:10px;padding:4px 6px;border-radius:2px;cursor:pointer;margin-left:4px;">
+      </select>
     </div>
   </div>
 
@@ -296,15 +298,21 @@
   <div id="panel-article" class="panel active">
     <div class="lookup-hint">💡 點擊文章裡的任何單字，即時查詢並加入單字本</div>
     <div class="art-wrap">
-      <div class="art-kicker" id="art-kicker"></div>
-      <div class="art-hed" id="art-hed"></div>
-      <div class="art-deck" id="art-deck"></div>
-      <div class="art-byline" id="art-byline"></div>
+      <div class="art-kicker" id="art-kicker">Everyday Life · Habits</div>
+      <div class="art-hed" id="art-hed">The Perfect Morning: How People Start Their Day</div>
+      <div class="art-deck" id="art-deck">From coffee lovers to early risers, everyone has a morning ritual. Let's explore what a typical morning looks like in English.</div>
+      <div class="art-byline" id="art-byline">A2 LEVEL · 3-MINUTE READ · TOPIC: DAILY LIFE</div>
       <div class="art-cols">
-        <div class="art-body" id="art-body"></div>
+        <div class="art-body" id="art-body"><p>Every morning, millions of people around the world wake up and begin their day in different ways. Some people <span class="hw" data-word="set an alarm" data-pron="/sɛt ən əˈlɑːrm/" data-zh="設定鬧鐘" data-eg="I set an alarm for 7 a.m. every day.">set an alarm</span> for 6 a.m. Others prefer to <span class="hw" data-word="sleep in" data-pron="/sliːp ɪn/" data-zh="睡懶覺、賴床" data-eg="On Sundays, I love to sleep in.">sleep in</span> until 8 or 9.</p><p>After waking up, most people <span class="hw" data-word="brush their teeth" data-pron="/brʌʃ ðɛr tiːθ/" data-zh="刷牙" data-eg="I brush my teeth twice a day.">brush their teeth</span> and wash their face. Then comes breakfast. Many people say it is the most important meal of the day.</p><p>In Taiwan, many people eat at a <span class="hw" data-word="breakfast shop" data-pron="/ˈbrɛkfəst ʃɒp/" data-zh="早餐店" data-eg="There's a great breakfast shop near my office.">breakfast shop</span>. In the UK, people often eat toast. In the USA, <span class="hw" data-word="cereal" data-pron="/ˈsɪəriəl/" data-zh="穀物早餐（麥片等）" data-eg="I have cereal with cold milk every morning.">cereal</span> or pancakes are popular.</p><p>After breakfast, people <span class="hw" data-word="commute" data-pron="/kəˈmjuːt/" data-zh="通勤" data-eg="My commute takes 30 minutes.">commute</span> to work or school. A good morning <span class="hw" data-word="ritual" data-pron="/ˈrɪtʃuəl/" data-zh="儀式感、固定習慣" data-eg="My morning ritual is coffee and a short walk.">ritual</span> helps you feel <span class="hw" data-word="energized" data-pron="/ˈɛnərˌdʒaɪzd/" data-zh="精力充沛的" data-eg="Coffee makes me feel energized.">energized</span> all day.</p></div>
         <div class="vocab-col">
           <div class="vocab-col-head">Today's Words</div>
-          <div id="vocab-list"></div>
+          <div id="vocab-list">
+            <div class="ve"><div class="ve-word">set an alarm</div><div class="ve-pron">/sɛt ən əˈlɑːrm/</div><div class="ve-zh">設定鬧鐘</div><div class="ve-eg">"I set an alarm for 7 a.m. every day."</div></div>
+            <div class="ve"><div class="ve-word">sleep in</div><div class="ve-pron">/sliːp ɪn/</div><div class="ve-zh">睡懶覺、賴床</div><div class="ve-eg">"On Sundays, I love to sleep in."</div></div>
+            <div class="ve"><div class="ve-word">ritual</div><div class="ve-pron">/ˈrɪtʃuəl/</div><div class="ve-zh">儀式感、固定習慣</div><div class="ve-eg">"My morning ritual is coffee and a short walk."</div></div>
+            <div class="ve"><div class="ve-word">commute</div><div class="ve-pron">/kəˈmjuːt/</div><div class="ve-zh">通勤</div><div class="ve-eg">"My commute takes 30 minutes."</div></div>
+            <div class="ve"><div class="ve-word">energized</div><div class="ve-pron">/ˈɛnərˌdʒaɪzd/</div><div class="ve-zh">精力充沛的</div><div class="ve-eg">"Coffee makes me feel energized."</div></div>
+          </div>
         </div>
       </div>
     </div>
@@ -440,120 +448,59 @@
 
 <script>
 // ══════════════════════════════════════════════════════
-//  CONTENT DATA
+//  30-DAY PLAN — theme + vocab + dialogue mode only
+//  Article body is AI-generated and cached in localStorage
 // ══════════════════════════════════════════════════════
 const DAYS = [
-  {
-    day:1, theme:"Morning Routines",
-    article:{
-      kicker:"Everyday Life · Habits",
-      hed:"The Perfect Morning: How People Start Their Day",
-      deck:"From coffee lovers to early risers, everyone has a morning ritual. Let's explore what a typical morning looks like in English.",
-      byline:"A2 LEVEL · 3-MINUTE READ · TOPIC: DAILY LIFE",
-      body:`<p>Every morning, millions of people around the world wake up and begin their day in different ways. Some people <span class="hw" data-word="set an alarm" data-pron="/sɛt ən əˈlɑːrm/" data-zh="設定鬧鐘" data-eg="I set an alarm for 7 a.m. every day.">set an alarm</span> for 6 a.m. Others prefer to <span class="hw" data-word="sleep in" data-pron="/sliːp ɪn/" data-zh="睡懶覺、賴床" data-eg="On Sundays, I love to sleep in.">sleep in</span> until 8 or 9.</p>
-<p>After waking up, most people <span class="hw" data-word="brush their teeth" data-pron="/brʌʃ ðɛr tiːθ/" data-zh="刷牙" data-eg="I brush my teeth twice a day.">brush their teeth</span> and wash their face. Then comes breakfast. Many people say it is the most important meal of the day.</p>
-<p>In Taiwan, many people eat at a <span class="hw" data-word="breakfast shop" data-pron="/ˈbrɛkfəst ʃɒp/" data-zh="早餐店" data-eg="There's a great breakfast shop near my office.">breakfast shop</span>. In the UK, people often eat toast. In the USA, <span class="hw" data-word="cereal" data-pron="/ˈsɪəriəl/" data-zh="穀物早餐（麥片等）" data-eg="I have cereal with cold milk every morning.">cereal</span> or pancakes are popular.</p>
-<p>After breakfast, people <span class="hw" data-word="commute" data-pron="/kəˈmjuːt/" data-zh="通勤" data-eg="My commute takes 30 minutes.">commute</span> to work or school. A good morning <span class="hw" data-word="ritual" data-pron="/ˈrɪtʃuəl/" data-zh="儀式感、固定習慣" data-eg="My morning ritual is coffee and a short walk.">ritual</span> helps you feel <span class="hw" data-word="energized" data-pron="/ˈɛnərˌdʒaɪzd/" data-zh="精力充沛的" data-eg="Coffee makes me feel energized.">energized</span> all day.</p>`
-    },
-    vocab:[
-      {word:"set an alarm",pron:"/sɛt ən əˈlɑːrm/",zh:"設定鬧鐘",eg:"I set an alarm for 7 a.m. every day."},
-      {word:"sleep in",pron:"/sliːp ɪn/",zh:"睡懶覺、賴床",eg:"On Sundays, I love to sleep in."},
-      {word:"ritual",pron:"/ˈrɪtʃuəl/",zh:"儀式感、固定習慣",eg:"My morning ritual is coffee and a short walk."},
-      {word:"commute",pron:"/kəˈmjuːt/",zh:"通勤",eg:"My commute takes 30 minutes."},
-      {word:"energized",pron:"/ˈɛnərˌdʒaɪzd/",zh:"精力充沛的",eg:"Coffee makes me feel energized."},
-    ],
-    dlgMode:"script",
-    dlgContext:"Two colleagues meet in the office kitchen on Monday morning."
-  },
-  {
-    day:2, theme:"Ordering Food",
-    article:{
-      kicker:"Food & Dining · Real-Life English",
-      hed:"How to Order Food Like a Local",
-      deck:"Eating out in an English-speaking country? A few key phrases will help you order with total confidence.",
-      byline:"A2 LEVEL · 3-MINUTE READ · TOPIC: RESTAURANTS",
-      body:`<p>Going to a restaurant in an English-speaking country can feel <span class="hw" data-word="nerve-wracking" data-pron="/ˈnɜːrv ˌrækɪŋ/" data-zh="令人緊張的" data-eg="Speaking English is nerve-wracking at first.">nerve-wracking</span> at first. But with a few phrases, you can order like a pro.</p>
-<p>When you arrive, a <span class="hw" data-word="server" data-pron="/ˈsɜːrvər/" data-zh="服務員（美式）" data-eg="The server was very friendly.">server</span> will greet you. You can say: <em>"Just water, please"</em> or <em>"I'll have an iced tea."</em></p>
-<p>When you are ready, say: <em>"I'd like the chicken sandwich"</em> or <em>"Can I get the pasta?"</em> If you are not sure, ask: <em>"What do you <span class="hw" data-word="recommend" data-pron="/ˌrɛkəˈmɛnd/" data-zh="推薦" data-eg="What do you recommend here?">recommend</span>?"</em></p>
-<p>At the end, the server brings the <span class="hw" data-word="check" data-pron="/tʃɛk/" data-zh="帳單（美式，英式叫 bill）" data-eg="Can we have the check, please?">check</span>. In the USA, it is <span class="hw" data-word="customary" data-pron="/ˈkʌstəˌmɛri/" data-zh="慣例的、習俗上的" data-eg="It's customary to tip in the USA.">customary</span> to tip 15–20%.</p>`
-    },
-    vocab:[
-      {word:"nerve-wracking",pron:"/ˈnɜːrv ˌrækɪŋ/",zh:"令人緊張的",eg:"Speaking English is nerve-wracking at first."},
-      {word:"server",pron:"/ˈsɜːrvər/",zh:"服務員（美式）",eg:"The server was very friendly."},
-      {word:"recommend",pron:"/ˌrɛkəˈmɛnd/",zh:"推薦",eg:"What do you recommend here?"},
-      {word:"check",pron:"/tʃɛk/",zh:"帳單（美式）",eg:"Can we have the check, please?"},
-      {word:"customary",pron:"/ˈkʌstəˌmɛri/",zh:"慣例的",eg:"It's customary to tip in the USA."},
-    ],
-    dlgMode:"roleplay",
-    dlgContext:"You are a customer at a café. The AI plays the staff. Order a meal naturally."
-  },
-  {
-    day:3, theme:"Making Plans",
-    article:{
-      kicker:"Social Life · Invitations",
-      hed:"Let's Make Plans: Inviting, Accepting & Declining",
-      deck:"One of the most common conversations in English is making plans with friends. Learn to invite, accept, and politely say no.",
-      byline:"A2 LEVEL · 3-MINUTE READ · TOPIC: SOCIAL LIFE",
-      body:`<p>In English, making plans is a very natural part of <span class="hw" data-word="social life" data-pron="/ˈsoʊʃəl laɪf/" data-zh="社交生活" data-eg="She has a very active social life.">social life</span>. Knowing how to invite someone and <span class="hw" data-word="decline" data-pron="/dɪˈklaɪn/" data-zh="婉拒" data-eg="She had to decline the invitation.">decline</span> politely is essential.</p>
-<p>To invite someone: <em>"Do you want to <span class="hw" data-word="hang out" data-pron="/hæŋ aʊt/" data-zh="出去玩、聚一聚" data-eg="Let's hang out this Saturday!">hang out</span> this weekend?"</em> or <em>"Are you free on Saturday?"</em></p>
-<p>To say yes: <em>"That sounds great!"</em> or <em>"<span class="hw" data-word="Count me in" data-pron="/kaʊnt miː ɪn/" data-zh="算我一個！" data-eg="A picnic? Count me in!">Count me in</span>!"</em> To say no politely: <em>"I wish I could, but I already have plans."</em></p>
-<p>You can also <span class="hw" data-word="suggest" data-pron="/səˈdʒɛst/" data-zh="建議" data-eg="Can you suggest a good place?">suggest</span> another time: <em>"How about next weekend?"</em> This shows you still want to <span class="hw" data-word="catch up" data-pron="/kætʃ ʌp/" data-zh="敘舊、重新聯絡" data-eg="We should catch up over coffee.">catch up</span>.</p>`
-    },
-    vocab:[
-      {word:"hang out",pron:"/hæŋ aʊt/",zh:"出去玩、聚一聚",eg:"Let's hang out this Saturday!"},
-      {word:"decline",pron:"/dɪˈklaɪn/",zh:"婉拒",eg:"She had to decline the invitation."},
-      {word:"count me in",pron:"/kaʊnt miː ɪn/",zh:"算我一個！",eg:"A picnic? Count me in!"},
-      {word:"suggest",pron:"/səˈdʒɛst/",zh:"建議",eg:"Can you suggest a good place?"},
-      {word:"catch up",pron:"/kætʃ ʌp/",zh:"敘舊、重新聯絡",eg:"We should catch up over coffee."},
-    ],
-    dlgMode:"situation",
-    dlgContext:"Read each situation. Write what you would say in English, then reveal the natural answer."
-  },
-  {
-    day:4, theme:"Giving Directions",
-    article:{
-      kicker:"Getting Around · Navigation",
-      hed:"Excuse Me — How Do I Get There?",
-      deck:"Asking for and giving directions is one of the most practical skills in English. These phrases will get you anywhere.",
-      byline:"A2 LEVEL · 3-MINUTE READ · TOPIC: NAVIGATION",
-      body:`<p>Whether you are in a new city or helping a tourist, knowing how to give <span class="hw" data-word="directions" data-pron="/dɪˈrɛkʃənz/" data-zh="方向、路線指引" data-eg="Can you give me directions to the park?">directions</span> is very useful.</p>
-<p>To ask: <em>"Excuse me, how do I get to the train station?"</em> or <em>"Is there a pharmacy <span class="hw" data-word="nearby" data-pron="/ˈnɪərˌbaɪ/" data-zh="附近" data-eg="Is there a coffee shop nearby?">nearby</span>?"</em></p>
-<p>To answer: <em>"<span class="hw" data-word="Go straight" data-pron="/ɡoʊ streɪt/" data-zh="直走" data-eg="Go straight for about 5 minutes.">Go straight</span> for two blocks."</em> <em>"Turn left at the traffic light."</em> <em>"It's <span class="hw" data-word="next to" data-pron="/ˈnɛkst tuː/" data-zh="在⋯旁邊" data-eg="The bank is next to the post office.">next to</span> the supermarket."</em></p>
-<p>If you are not sure, say: <em>"I'm sorry, I'm not from around here."</em> This is honest and <span class="hw" data-word="polite" data-pron="/pəˈlaɪt/" data-zh="有禮貌的" data-eg="It's polite to say thank you.">polite</span>.</p>`
-    },
-    vocab:[
-      {word:"directions",pron:"/dɪˈrɛkʃənz/",zh:"方向、路線指引",eg:"Can you give me directions to the park?"},
-      {word:"nearby",pron:"/ˈnɪərˌbaɪ/",zh:"附近",eg:"Is there a coffee shop nearby?"},
-      {word:"go straight",pron:"/ɡoʊ streɪt/",zh:"直走",eg:"Go straight for about 5 minutes."},
-      {word:"next to",pron:"/ˈnɛkst tuː/",zh:"在⋯旁邊",eg:"The bank is next to the post office."},
-      {word:"polite",pron:"/pəˈlaɪt/",zh:"有禮貌的",eg:"It's polite to say thank you."},
-    ],
-    dlgMode:"roleplay",
-    dlgContext:"You are a tourist asking for directions. The AI plays a local. Find the train station."
-  },
-  {
-    day:5, theme:"Talking About the Past",
-    article:{
-      kicker:"Grammar in Action · Past Tense",
-      hed:"What Did You Do Last Weekend?",
-      deck:"The past simple tense is one of the most used grammar points in English. Learn to talk about last week's events naturally.",
-      byline:"A2 LEVEL · 3-MINUTE READ · TOPIC: GRAMMAR + LIFE",
-      body:`<p>In English, we use the <span class="hw" data-word="past simple" data-pron="/pæst ˈsɪmpəl/" data-zh="過去簡單式" data-eg="I used the past simple to describe yesterday.">past simple</span> to talk about finished events. For most verbs, just add <em>-ed</em>.</p>
-<p>Regular: <em>I <strong>worked</strong> yesterday. She <strong>cooked</strong> dinner. We <strong>watched</strong> a movie.</em></p>
-<p><span class="hw" data-word="Irregular verbs" data-pron="/ɪˈrɛɡjʊlər vɜːrbz/" data-zh="不規則動詞" data-eg="Eat→ate, go→went, sleep→slept are all irregular verbs.">Irregular verbs</span> change completely: <em>I <strong>ate</strong> pizza. He <strong>went</strong> to the gym. They <strong>slept</strong> late.</em> These must be <span class="hw" data-word="memorised" data-pron="/ˈmɛməˌraɪzd/" data-zh="背起來的、記住的" data-eg="These verbs need to be memorised.">memorised</span>.</p>
-<p>To ask about the past: <em>"What did you do last weekend?"</em> Adding a detail sounds more <span class="hw" data-word="fluent" data-pron="/ˈfluːənt/" data-zh="流利的" data-eg="She speaks fluent English.">fluent</span>: <em>"I went hiking — and we got totally lost!"</em></p>`
-    },
-    vocab:[
-      {word:"past simple",pron:"/pæst ˈsɪmpəl/",zh:"過去簡單式",eg:"I used the past simple to describe yesterday."},
-      {word:"irregular verbs",pron:"/ɪˈrɛɡjʊlər vɜːrbz/",zh:"不規則動詞",eg:"Eat→ate, go→went are irregular verbs."},
-      {word:"memorise",pron:"/ˈmɛməˌraɪz/",zh:"背起來、記住",eg:"You need to memorise irregular verbs."},
-      {word:"fluent",pron:"/ˈfluːənt/",zh:"流利的",eg:"She speaks fluent English."},
-      {word:"went",pron:"/wɛnt/",zh:"去了（go的過去式）",eg:"She went to the beach last Sunday."},
-    ],
-    dlgMode:"script",
-    dlgContext:"Two friends catch up and talk about what they did last weekend."
-  }
+  {day:1,  theme:"Morning Routines",         kicker:"Everyday Life · Habits",          dlgMode:"script",    dlgContext:"Two colleagues meet in the office kitchen on Monday morning.", vocab:[{word:"set an alarm",pron:"/sɛt ən əˈlɑːrm/",zh:"設定鬧鐘",eg:"I set an alarm for 7am every day."},{word:"sleep in",pron:"/sliːp ɪn/",zh:"睡懶覺、賴床",eg:"On Sundays I love to sleep in."},{word:"ritual",pron:"/ˈrɪtʃuəl/",zh:"固定習慣、儀式感",eg:"My morning ritual is coffee and a walk."},{word:"commute",pron:"/kəˈmjuːt/",zh:"通勤",eg:"My commute takes 30 minutes."},{word:"energized",pron:"/ˈɛnərˌdʒaɪzd/",zh:"精力充沛的",eg:"Coffee makes me feel energized."}]},
+  {day:2,  theme:"Ordering Food",            kicker:"Food & Dining · Real-Life English", dlgMode:"roleplay",  dlgContext:"You are a customer at a café. The AI plays the staff. Order a meal.", vocab:[{word:"recommend",pron:"/ˌrɛkəˈmɛnd/",zh:"推薦",eg:"What do you recommend here?"},{word:"server",pron:"/ˈsɜːrvər/",zh:"服務員（美式）",eg:"The server was very friendly."},{word:"check",pron:"/tʃɛk/",zh:"帳單（美式）",eg:"Can we have the check, please?"},{word:"customary",pron:"/ˈkʌstəˌmɛri/",zh:"慣例的",eg:"It's customary to tip in the USA."},{word:"nerve-wracking",pron:"/ˈnɜːrv ˌrækɪŋ/",zh:"令人緊張的",eg:"Speaking English is nerve-wracking at first."}]},
+  {day:3,  theme:"Making Plans",             kicker:"Social Life · Invitations",        dlgMode:"situation", dlgContext:"Situations about inviting friends and making weekend plans.", vocab:[{word:"hang out",pron:"/hæŋ aʊt/",zh:"出去玩、聚一聚",eg:"Let's hang out this Saturday!"},{word:"decline",pron:"/dɪˈklaɪn/",zh:"婉拒",eg:"She had to decline the invitation."},{word:"count me in",pron:"/kaʊnt miː ɪn/",zh:"算我一個！",eg:"A picnic? Count me in!"},{word:"suggest",pron:"/səˈdʒɛst/",zh:"建議",eg:"Can you suggest a good place?"},{word:"catch up",pron:"/kætʃ ʌp/",zh:"敘舊",eg:"We should catch up over coffee."}]},
+  {day:4,  theme:"Giving Directions",        kicker:"Getting Around · Navigation",      dlgMode:"roleplay",  dlgContext:"You are a tourist asking a local for directions to the train station.", vocab:[{word:"go straight",pron:"/ɡoʊ streɪt/",zh:"直走",eg:"Go straight for 5 minutes."},{word:"turn left",pron:"/tɜːrn lɛft/",zh:"左轉",eg:"Turn left at the traffic light."},{word:"nearby",pron:"/ˈnɪərˌbaɪ/",zh:"附近",eg:"Is there a coffee shop nearby?"},{word:"next to",pron:"/ˈnɛkst tuː/",zh:"在⋯旁邊",eg:"It's next to the supermarket."},{word:"polite",pron:"/pəˈlaɪt/",zh:"有禮貌的",eg:"It's polite to say thank you."}]},
+  {day:5,  theme:"Talking About the Past",   kicker:"Grammar in Action · Past Tense",   dlgMode:"script",    dlgContext:"Two friends catching up about what they did last weekend.", vocab:[{word:"went",pron:"/wɛnt/",zh:"去了（go的過去式）",eg:"She went to the beach."},{word:"ate",pron:"/eɪt/",zh:"吃了（eat的過去式）",eg:"We ate great food."},{word:"irregular verbs",pron:"/ɪˈrɛɡjʊlər vɜːrbz/",zh:"不規則動詞",eg:"Eat→ate, go→went are irregular verbs."},{word:"memorise",pron:"/ˈmɛməˌraɪz/",zh:"背記",eg:"You need to memorise these verbs."},{word:"fluent",pron:"/ˈfluːənt/",zh:"流利的",eg:"She speaks fluent English."}]},
+  {day:6,  theme:"Shopping for Clothes",     kicker:"Retail English · Fashion",         dlgMode:"roleplay",  dlgContext:"You are shopping for clothes. The AI plays a shop assistant.", vocab:[{word:"try on",pron:"/traɪ ɒn/",zh:"試穿",eg:"Can I try this on?"},{word:"fitting room",pron:"/ˈfɪtɪŋ ruːm/",zh:"試衣間",eg:"The fitting room is over there."},{word:"on sale",pron:"/ɒn seɪl/",zh:"特價中",eg:"Is this jacket on sale?"},{word:"size",pron:"/saɪz/",zh:"尺寸",eg:"Do you have this in a smaller size?"},{word:"receipt",pron:"/rɪˈsiːt/",zh:"收據",eg:"Can I have the receipt, please?"}]},
+  {day:7,  theme:"Talking About Family",     kicker:"Personal Life · Relationships",    dlgMode:"script",    dlgContext:"Two people getting to know each other and talking about their families.", vocab:[{word:"sibling",pron:"/ˈsɪblɪŋ/",zh:"兄弟姊妹",eg:"I have two siblings."},{word:"only child",pron:"/ˈoʊnli tʃaɪld/",zh:"獨生子女",eg:"She's an only child."},{word:"get along",pron:"/ɡɛt əˈlɒŋ/",zh:"相處融洽",eg:"I get along well with my brother."},{word:"close",pron:"/kloʊs/",zh:"親近的",eg:"We are very close as a family."},{word:"raise",pron:"/reɪz/",zh:"撫養",eg:"She was raised in Taipei."}]},
+  {day:8,  theme:"At the Doctor",            kicker:"Health & Wellbeing · Medical",     dlgMode:"roleplay",  dlgContext:"You are a patient at a clinic. The AI plays the doctor.", vocab:[{word:"symptom",pron:"/ˈsɪmptəm/",zh:"症狀",eg:"What are your symptoms?"},{word:"prescription",pron:"/prɪˈskrɪpʃən/",zh:"處方箋",eg:"I'll write you a prescription."},{word:"appointment",pron:"/əˈpɔɪntmənt/",zh:"預約",eg:"I'd like to make an appointment."},{word:"dizzy",pron:"/ˈdɪzi/",zh:"頭暈的",eg:"I feel dizzy and tired."},{word:"allergic",pron:"/əˈlɜːrdʒɪk/",zh:"過敏的",eg:"I'm allergic to penicillin."}]},
+  {day:9,  theme:"Talking About Hobbies",    kicker:"Lifestyle · Free Time",            dlgMode:"situation", dlgContext:"Situations where you describe your hobbies and interests.", vocab:[{word:"passionate about",pron:"/ˈpæʃənət əˈbaʊt/",zh:"對⋯充滿熱情",eg:"I'm passionate about photography."},{word:"pick up",pron:"/pɪk ʌp/",zh:"開始學（新技能）",eg:"I picked up guitar last year."},{word:"spare time",pron:"/spɛr taɪm/",zh:"空閒時間",eg:"What do you do in your spare time?"},{word:"keen on",pron:"/kiːn ɒn/",zh:"熱衷於",eg:"She's very keen on cooking."},{word:"give it a try",pron:"/ɡɪv ɪt ə traɪ/",zh:"試試看",eg:"I'd love to give it a try!"}]},
+  {day:10, theme:"Travel & Transportation",  kicker:"Getting Around · Travel",          dlgMode:"roleplay",  dlgContext:"You are at an airport checking in. The AI plays the airline staff.", vocab:[{word:"boarding pass",pron:"/ˈbɔːrdɪŋ pæs/",zh:"登機證",eg:"Here is your boarding pass."},{word:"departure",pron:"/dɪˈpɑːrtʃər/",zh:"出發、起飛",eg:"What is the departure time?"},{word:"layover",pron:"/ˈleɪoʊvər/",zh:"中途轉機停留",eg:"I have a 3-hour layover in Tokyo."},{word:"carry-on",pron:"/ˈkæri ɒn/",zh:"手提行李",eg:"Is this bag a carry-on?"},{word:"customs",pron:"/ˈkʌstəmz/",zh:"海關",eg:"You need to go through customs."}]},
+  {day:11, theme:"Describing Your Job",      kicker:"Work Life · Career",               dlgMode:"script",    dlgContext:"Two people at a networking event talking about their jobs.", vocab:[{word:"in charge of",pron:"/ɪn tʃɑːrdʒ ɒv/",zh:"負責",eg:"I'm in charge of marketing."},{word:"deadline",pron:"/ˈdɛdlaɪn/",zh:"截止日期",eg:"The deadline is Friday."},{word:"colleague",pron:"/ˈkɒliːɡ/",zh:"同事",eg:"My colleague is very helpful."},{word:"promote",pron:"/prəˈmoʊt/",zh:"升遷",eg:"She was promoted last year."},{word:"remote work",pron:"/rɪˈmoʊt wɜːrk/",zh:"遠端工作",eg:"I do remote work two days a week."}]},
+  {day:12, theme:"Expressing Opinions",      kicker:"Communication · Opinions",         dlgMode:"situation", dlgContext:"Situations where you need to share your opinion politely.", vocab:[{word:"in my opinion",pron:"/ɪn maɪ əˈpɪnjən/",zh:"我認為",eg:"In my opinion, this is the best option."},{word:"I'd say",pron:"/aɪd seɪ/",zh:"我會說、我覺得",eg:"I'd say it's better to wait."},{word:"to be honest",pron:"/tə biː ˈɒnɪst/",zh:"說實話",eg:"To be honest, I'm not sure."},{word:"fair point",pron:"/fɛr pɔɪnt/",zh:"說得有道理",eg:"That's a fair point."},{word:"I'd rather",pron:"/aɪd ˈrɑːðər/",zh:"我寧願",eg:"I'd rather stay home tonight."}]},
+  {day:13, theme:"At the Bank",              kicker:"Daily Life · Finance",             dlgMode:"roleplay",  dlgContext:"You need to open a bank account. The AI plays the bank clerk.", vocab:[{word:"account",pron:"/əˈkaʊnt/",zh:"帳戶",eg:"I'd like to open an account."},{word:"transfer",pron:"/ˈtrænsˌfɜːr/",zh:"轉帳",eg:"Can I transfer money online?"},{word:"withdraw",pron:"/wɪðˈdrɔː/",zh:"提款",eg:"I need to withdraw some cash."},{word:"exchange rate",pron:"/ɪksˈtʃeɪndʒ reɪt/",zh:"匯率",eg:"What is today's exchange rate?"},{word:"fee",pron:"/fiː/",zh:"手續費",eg:"Is there a fee for this service?"}]},
+  {day:14, theme:"The Weather",              kicker:"Small Talk · Weather",             dlgMode:"script",    dlgContext:"Two neighbours chatting about the weather and weekend plans.", vocab:[{word:"forecast",pron:"/ˈfɔːrkæst/",zh:"天氣預報",eg:"The forecast says rain tomorrow."},{word:"humid",pron:"/ˈhjuːmɪd/",zh:"潮濕的",eg:"It's very humid today."},{word:"pour",pron:"/pɔːr/",zh:"傾盆大雨",eg:"It's pouring outside!"},{word:"breeze",pron:"/briːz/",zh:"微風",eg:"There's a nice breeze today."},{word:"clear up",pron:"/klɪər ʌp/",zh:"（天氣）放晴",eg:"I hope it clears up by afternoon."}]},
+  {day:15, theme:"Making Complaints",        kicker:"Real Life · Problem Solving",      dlgMode:"roleplay",  dlgContext:"You received a wrong order at a restaurant. Complain politely to the staff.", vocab:[{word:"complaint",pron:"/kəmˈpleɪnt/",zh:"投訴、抱怨",eg:"I'd like to make a complaint."},{word:"unacceptable",pron:"/ˌʌnəkˈsɛptəbəl/",zh:"無法接受的",eg:"This is completely unacceptable."},{word:"refund",pron:"/ˈriːfʌnd/",zh:"退款",eg:"I'd like a refund, please."},{word:"apology",pron:"/əˈpɒlədʒi/",zh:"道歉",eg:"I accept your apology."},{word:"sort out",pron:"/sɔːrt aʊt/",zh:"解決問題",eg:"Can you sort this out for me?"}]},
+  {day:16, theme:"Talking About Food",       kicker:"Culture · Food & Taste",           dlgMode:"situation", dlgContext:"Situations describing food preferences, tastes, and dining experiences.", vocab:[{word:"savoury",pron:"/ˈseɪvəri/",zh:"鹹的、鮮美的",eg:"I prefer savoury food over sweet."},{word:"spicy",pron:"/ˈspaɪsi/",zh:"辛辣的",eg:"Is this dish very spicy?"},{word:"portion",pron:"/ˈpɔːrʃən/",zh:"份量",eg:"The portion was huge!"},{word:"appetizer",pron:"/ˈæpɪˌtaɪzər/",zh:"開胃菜",eg:"We ordered two appetizers."},{word:"indulge",pron:"/ɪnˈdʌldʒ/",zh:"放縱享受",eg:"I like to indulge in dessert on Fridays."}]},
+  {day:17, theme:"Social Media & Tech",      kicker:"Modern Life · Digital",            dlgMode:"script",    dlgContext:"Two friends talking about social media habits and screen time.", vocab:[{word:"scroll",pron:"/skroʊl/",zh:"滑（手機）",eg:"I've been scrolling for an hour."},{word:"post",pron:"/poʊst/",zh:"發文",eg:"She posted a photo on Instagram."},{word:"go viral",pron:"/ɡoʊ ˈvaɪrəl/",zh:"爆紅",eg:"That video went viral overnight."},{word:"unplug",pron:"/ʌnˈplʌɡ/",zh:"斷開螢幕、數位排毒",eg:"I try to unplug on weekends."},{word:"stream",pron:"/striːm/",zh:"串流",eg:"I stream music all day at work."}]},
+  {day:18, theme:"Renting an Apartment",     kicker:"Practical English · Housing",      dlgMode:"roleplay",  dlgContext:"You are looking to rent an apartment. The AI plays the landlord.", vocab:[{word:"rent",pron:"/rɛnt/",zh:"租金",eg:"What's the monthly rent?"},{word:"deposit",pron:"/dɪˈpɒzɪt/",zh:"押金",eg:"The deposit is two months' rent."},{word:"utilities",pron:"/juːˈtɪlɪtiz/",zh:"水電費",eg:"Are utilities included?"},{word:"lease",pron:"/liːs/",zh:"租約",eg:"The lease is for one year."},{word:"landlord",pron:"/ˈlændlɔːrd/",zh:"房東",eg:"My landlord is very responsive."}]},
+  {day:19, theme:"Feelings & Emotions",      kicker:"Inner Life · Emotional English",   dlgMode:"situation", dlgContext:"Situations describing how you feel in different everyday scenarios.", vocab:[{word:"overwhelmed",pron:"/ˌoʊvərˈwɛlmd/",zh:"不知所措、負擔過重",eg:"I'm feeling completely overwhelmed."},{word:"relieved",pron:"/rɪˈliːvd/",zh:"鬆了一口氣",eg:"I was so relieved to hear the news."},{word:"anxious",pron:"/ˈæŋkʃəs/",zh:"焦慮的",eg:"I feel anxious before presentations."},{word:"content",pron:"/kənˈtɛnt/",zh:"滿足的",eg:"She seems content with her life."},{word:"frustrated",pron:"/ˈfrʌstreɪtɪd/",zh:"沮喪的、挫折的",eg:"I get frustrated when I make mistakes."}]},
+  {day:20, theme:"Going to a Party",         kicker:"Social Life · Events",             dlgMode:"script",    dlgContext:"Two people at a house party meeting for the first time.", vocab:[{word:"host",pron:"/hoʊst/",zh:"主辦人、主人",eg:"The host was incredibly welcoming."},{word:"mingle",pron:"/ˈmɪŋɡəl/",zh:"（在派對上）交際",eg:"I need to mingle more at parties."},{word:"show up",pron:"/ʃoʊ ʌp/",zh:"出現、到場",eg:"Did she show up to the party?"},{word:"RSVP",pron:"/ˌɑːr ɛs viː ˈpiː/",zh:"回覆出席",eg:"Please RSVP by Friday."},{word:"bring up",pron:"/brɪŋ ʌp/",zh:"提起（話題）",eg:"Don't bring up politics at the party."}]},
+  {day:21, theme:"Future Plans & Dreams",    kicker:"Ambition · Looking Ahead",         dlgMode:"situation", dlgContext:"Situations where you talk about your future goals and dreams.", vocab:[{word:"aspire to",pron:"/əˈspaɪər tuː/",zh:"渴望、有志於",eg:"I aspire to travel the world."},{word:"eventually",pron:"/ɪˈvɛntʃuəli/",zh:"最終、終究",eg:"I'll eventually learn to drive."},{word:"work towards",pron:"/wɜːrk təˈwɔːrdz/",zh:"朝⋯努力",eg:"I'm working towards my goal."},{word:"realistic",pron:"/ˌrɪəˈlɪstɪk/",zh:"實際的",eg:"Be realistic about your timeline."},{word:"bucket list",pron:"/ˈbʌkɪt lɪst/",zh:"人生願望清單",eg:"Visiting Japan is on my bucket list."}]},
+  {day:22, theme:"Apologising & Forgiving",  kicker:"Social Skills · Conflict",         dlgMode:"roleplay",  dlgContext:"You accidentally cancelled plans with a friend. Apologise sincerely.", vocab:[{word:"sincerely",pron:"/sɪnˈsɪərli/",zh:"真誠地",eg:"I sincerely apologise."},{word:"let someone down",pron:"/lɛt ˈsʌmwʌn daʊn/",zh:"讓人失望",eg:"I'm sorry for letting you down."},{word:"make it up to",pron:"/meɪk ɪt ʌp tuː/",zh:"補償",eg:"I'll make it up to you, I promise."},{word:"forgive",pron:"/fərˈɡɪv/",zh:"原諒",eg:"I hope you can forgive me."},{word:"misunderstanding",pron:"/ˌmɪsʌndərˈstændɪŋ/",zh:"誤會",eg:"It was just a misunderstanding."}]},
+  {day:23, theme:"Cooking at Home",          kicker:"Daily Life · Food Prep",           dlgMode:"script",    dlgContext:"One friend teaches another how to cook a simple dish.", vocab:[{word:"recipe",pron:"/ˈrɛsɪpi/",zh:"食譜",eg:"Do you have a good recipe for pasta?"},{word:"ingredient",pron:"/ɪnˈɡriːdiənt/",zh:"食材",eg:"What ingredients do I need?"},{word:"simmer",pron:"/ˈsɪmər/",zh:"小火慢煮",eg:"Let it simmer for 20 minutes."},{word:"season",pron:"/ˈsiːzən/",zh:"調味",eg:"Season with salt and pepper."},{word:"taste",pron:"/teɪst/",zh:"試味道",eg:"Taste it and adjust the seasoning."}]},
+  {day:24, theme:"Job Interviews",           kicker:"Career · Professional English",    dlgMode:"roleplay",  dlgContext:"You are being interviewed for a job. The AI plays the interviewer.", vocab:[{word:"strength",pron:"/strɛŋθ/",zh:"優點、強項",eg:"What is your greatest strength?"},{word:"weakness",pron:"/ˈwiːknəs/",zh:"弱點",eg:"I'm working on my weakness in time management."},{word:"experience",pron:"/ɪkˈspɪəriəns/",zh:"經驗",eg:"I have 3 years of experience."},{word:"motivated",pron:"/ˈmoʊtɪveɪtɪd/",zh:"有動力的",eg:"I am very motivated to learn."},{word:"opportunity",pron:"/ˌɒpərˈtjuːnɪti/",zh:"機會",eg:"This is a great opportunity for me."}]},
+  {day:25, theme:"Discussing News",          kicker:"Current Affairs · Media",          dlgMode:"situation", dlgContext:"Situations commenting on a news story you just heard about.", vocab:[{word:"headline",pron:"/ˈhɛdlaɪn/",zh:"頭條新聞",eg:"Did you see the headline today?"},{word:"coverage",pron:"/ˈkʌvərɪdʒ/",zh:"媒體報導",eg:"The media coverage was intense."},{word:"controversy",pron:"/ˈkɒntrəˌvɜːrsi/",zh:"爭議",eg:"The decision caused a lot of controversy."},{word:"reliable",pron:"/rɪˈlaɪəbəl/",zh:"可靠的",eg:"Is that a reliable news source?"},{word:"perspective",pron:"/pərˈspɛktɪv/",zh:"觀點",eg:"I see it from a different perspective."}]},
+  {day:26, theme:"Talking About Movies",     kicker:"Culture · Entertainment",          dlgMode:"script",    dlgContext:"Two friends recommending movies and talking about their favourites.", vocab:[{word:"plot",pron:"/plɒt/",zh:"劇情",eg:"The plot was really unpredictable."},{word:"sequel",pron:"/ˈsiːkwəl/",zh:"續集",eg:"Have you seen the sequel yet?"},{word:"acting",pron:"/ˈæktɪŋ/",zh:"演技",eg:"The acting was incredible."},{word:"worth watching",pron:"/wɜːrθ ˈwɒtʃɪŋ/",zh:"值得一看",eg:"Is it worth watching?"},{word:"based on",pron:"/beɪst ɒn/",zh:"根據⋯改編",eg:"It's based on a true story."}]},
+  {day:27, theme:"Health & Exercise",        kicker:"Wellbeing · Fitness",              dlgMode:"roleplay",  dlgContext:"You are asking a gym trainer for advice about getting started. AI plays the trainer.", vocab:[{word:"work out",pron:"/wɜːrk aʊt/",zh:"健身、運動",eg:"I work out three times a week."},{word:"routine",pron:"/ruːˈtiːn/",zh:"固定習慣",eg:"I need a good fitness routine."},{word:"stretch",pron:"/strɛtʃ/",zh:"伸展",eg:"Always stretch before exercising."},{word:"calories",pron:"/ˈkæləriz/",zh:"卡路里",eg:"How many calories does this burn?"},{word:"consistent",pron:"/kənˈsɪstənt/",zh:"持之以恆的",eg:"The key is to be consistent."}]},
+  {day:28, theme:"Asking for Help",          kicker:"Communication · Problem Solving",  dlgMode:"situation", dlgContext:"Situations where you need to ask a stranger or colleague for help.", vocab:[{word:"favour",pron:"/ˈfeɪvər/",zh:"幫忙",eg:"Could you do me a favour?"},{word:"mind",pron:"/maɪnd/",zh:"介意",eg:"Do you mind helping me with this?"},{word:"appreciate",pron:"/əˈpriːʃieɪt/",zh:"感謝、感激",eg:"I really appreciate your help."},{word:"figure out",pron:"/ˈfɪɡər aʊt/",zh:"想出辦法、搞清楚",eg:"I can't figure out how to do this."},{word:"lend a hand",pron:"/lɛnd ə hænd/",zh:"幫一把",eg:"Can you lend me a hand?"}]},
+  {day:29, theme:"Celebrating & Toasting",   kicker:"Social Life · Celebrations",       dlgMode:"script",    dlgContext:"Friends celebrating a birthday at a restaurant.", vocab:[{word:"toast",pron:"/toʊst/",zh:"舉杯敬酒",eg:"Let's make a toast!"},{word:"cheers",pron:"/tʃɪərz/",zh:"乾杯！",eg:"Cheers! To a great year ahead."},{word:"congratulations",pron:"/kənˌɡrætʃuˈleɪʃənz/",zh:"恭喜",eg:"Congratulations on your promotion!"},{word:"occasion",pron:"/əˈkeɪʒən/",zh:"場合",eg:"This is a special occasion."},{word:"proud of",pron:"/praʊd ɒv/",zh:"以⋯為傲",eg:"I'm so proud of you."}]},
+  {day:30, theme:"Reflecting on Progress",   kicker:"Day 30 · Looking Back & Forward",  dlgMode:"situation", dlgContext:"Situations reflecting on what you've learned and setting new goals.", vocab:[{word:"milestone",pron:"/ˈmaɪlˌstoʊn/",zh:"里程碑",eg:"This is a real milestone for me."},{word:"progress",pron:"/ˈprɒɡrɛs/",zh:"進步",eg:"I can see real progress in my English."},{word:"confidence",pron:"/ˈkɒnfɪdəns/",zh:"信心",eg:"My confidence has really grown."},{word:"keep it up",pron:"/kiːp ɪt ʌp/",zh:"繼續保持！",eg:"You're doing great — keep it up!"},{word:"never give up",pron:"/ˈnɛvər ɡɪv ʌp/",zh:"永不放棄",eg:"Never give up on learning English."}]},
 ];
+
+// ══════════════════════════════════════════════════════
+//  ARTICLE CACHE KEY
+// ══════════════════════════════════════════════════════
+function articleCacheKey(dayNum) { return `daily-english-article-day${dayNum}`; }
+
+async function loadCachedArticle(dayNum) {
+  try {
+    const raw = localStorage.getItem(articleCacheKey(dayNum));
+    return raw ? JSON.parse(raw) : null;
+  } catch(e) { return null; }
+}
+
+async function cacheArticle(dayNum, articleObj) {
+  try {
+    localStorage.setItem(articleCacheKey(dayNum), JSON.stringify(articleObj));
+  } catch(e) { console.warn('Article cache failed', e); }
+}
 
 // ══════════════════════════════════════════════════════
 //  STORAGE — localStorage (works in Safari, Chrome, any browser)
@@ -615,6 +562,7 @@ document.getElementById('date-str').textContent =
     const nb = await loadNotebook();
     updateNBCount(nb.length);
   } catch(e) { console.warn('Notebook load failed', e); }
+  populateDayPicker();
   try {
     renderDay();
   } catch(e) { console.error('renderDay failed:', e); }
@@ -632,18 +580,19 @@ function renderDay() {
   document.getElementById('dlg-mode-label').textContent =
     {script:'Script + Shadow', roleplay:'Roleplay · AI Live', situation:'Situation · AI Live'}[d.dlgMode];
 
-  document.getElementById('art-kicker').textContent = d.article.kicker;
-  document.getElementById('art-hed').textContent = d.article.hed;
-  document.getElementById('art-deck').textContent = d.article.deck;
-  document.getElementById('art-byline').textContent = d.article.byline;
-  document.getElementById('art-body').innerHTML = d.article.body;
+  // Show loading state immediately
+  document.getElementById('art-kicker').textContent = d.kicker;
+  document.getElementById('art-hed').textContent = '⏳ Generating today\'s article…';
+  document.getElementById('art-deck').textContent = `Topic: ${d.theme}`;
+  document.getElementById('art-byline').textContent = 'A2 LEVEL · AI GENERATED · PLEASE WAIT';
+  document.getElementById('art-body').innerHTML = `<div style="color:var(--ink3);font-style:italic;font-size:14px;padding:20px 0">
+    <div style="display:flex;align-items:center;gap:10px;margin-bottom:8px"><div class="spinner" style="width:18px;height:18px;border-width:2px"></div> Writing article for Day ${d.day}: ${d.theme}…</div>
+    <div style="font-size:12px;opacity:.7">This takes about 10 seconds. It will be saved and won't need to load again.</div>
+  </div>`;
 
-  // make ALL words in article clickable
-  makeWordsClickable();
-
-  // curated vocab sidebar — auto-save on render
+  // vocab sidebar
   document.getElementById('vocab-list').innerHTML = d.vocab.map(v=>`
-    <div class="ve" onclick="openPopup('${v.word}','${v.pron}','${v.zh}','${v.eg}')">
+    <div class="ve" onclick="openPopup('${v.word.replace(/'/g,"\\'")}','${v.pron}','${v.zh}','${v.eg.replace(/'/g,"\\'")}')">
       <div class="ve-word">${v.word}</div>
       <div class="ve-pron">${v.pron}</div>
       <div class="ve-zh">${v.zh}</div>
@@ -667,19 +616,85 @@ function renderDay() {
 
   done = {article:false, video:false, dialogue:false, quiz:false};
   updateProgress();
-  // directly show article tab without triggering switchTab logic
   ['article','video','dialogue','quiz','notebook'].forEach((n,i)=>{
     const panel = document.getElementById(`panel-${n}`);
     const btn = document.querySelectorAll('.nav-btn')[i];
     if(panel) panel.classList.toggle('active', n==='article');
     if(btn) btn.classList.toggle('active', n==='article');
   });
-  done.article = true;
-  updateProgress();
+
+  // Load or generate article
+  loadOrGenerateArticle(d);
 }
 
-// Auto-save today's curated words silently
-async function autoSaveCurated(vocab) {
+async function loadOrGenerateArticle(d) {
+  // Check cache first
+  const cached = await loadCachedArticle(d.day);
+  if (cached) {
+    applyArticle(cached);
+    done.article = true;
+    updateProgress();
+    return;
+  }
+  // Generate via Claude API
+  try {
+    const vocab = d.vocab.map(v => v.word).join(', ');
+    const system = `You are an English teacher writing a short newspaper-style article for A2 level Taiwanese learners.
+Return ONLY valid JSON, no markdown, no explanation. Format exactly:
+{"hed":"Engaging headline","deck":"One sentence subtitle that hooks the reader","body":"HTML article body"}
+
+Rules for body HTML:
+- Write 4 paragraphs using <p> tags
+- Total length: 120-150 words
+- A2 level: short sentences, common words
+- Wrap EACH of the vocab words in this exact format: <span class="hw" data-word="WORD" data-pron="IPA" data-zh="Chinese" data-eg="Example sentence.">WORD</span>
+- Use <em> tags for example phrases in quotes
+- Make it interesting and culturally relevant to Taiwan`;
+
+    const prompt = `Write an article for Day ${d.day} of a 30-day English course.
+Topic: "${d.theme}"
+Kicker: "${d.kicker}"
+Vocabulary words to include (wrap ALL of them): ${vocab}
+Vocabulary details: ${JSON.stringify(d.vocab)}`;
+
+    const res = await fetch("https://api.anthropic.com/v1/messages", {
+      method:"POST",
+      headers:{"Content-Type":"application/json"},
+      body: JSON.stringify({
+        model:"claude-sonnet-4-20250514",
+        max_tokens:1000,
+        system, messages:[{role:"user",content:prompt}]
+      })
+    });
+    const data = await res.json();
+    const text = data.content?.[0]?.text || '{}';
+    const article = JSON.parse(text.replace(/```json|```/g,'').trim());
+    article.kicker = d.kicker;
+    article.byline = `A2 LEVEL · AI GENERATED · DAY ${d.day} · ${d.theme.toUpperCase()}`;
+    // Cache it
+    await cacheArticle(d.day, article);
+    applyArticle(article);
+    done.article = true;
+    updateProgress();
+    showToast(`Day ${d.day} article saved! Won't need to load again.`);
+  } catch(e) {
+    document.getElementById('art-hed').textContent = `Day ${d.day}: ${d.theme}`;
+    document.getElementById('art-deck').textContent = 'Could not load article. Check your internet connection.';
+    document.getElementById('art-byline').textContent = 'TAP BELOW TO RETRY';
+    document.getElementById('art-body').innerHTML = `<div style="padding:20px 0">
+      <button onclick="loadOrGenerateArticle(DAYS[${cur}])" style="background:var(--ink);color:var(--cream);border:none;padding:10px 20px;font-family:'DM Mono',monospace;font-size:11px;letter-spacing:.06em;cursor:pointer;border-radius:4px;">🔄 Retry</button>
+    </div>`;
+  }
+}
+
+function applyArticle(article) {
+  document.getElementById('art-kicker').textContent = article.kicker || '';
+  document.getElementById('art-hed').textContent = article.hed || '';
+  document.getElementById('art-deck').textContent = article.deck || '';
+  document.getElementById('art-byline').textContent = article.byline || '';
+  document.getElementById('art-body').innerHTML = article.body || '';
+  makeWordsClickable();
+}
   for (const v of vocab) {
     const nb = await loadNotebook();
     if (!nb.find(w => w.word.toLowerCase() === v.word.toLowerCase())) {
@@ -1002,6 +1017,16 @@ function switchTab(name) {
 
 function goPrev(){ if(cur>0){cur--;renderDay();} }
 function goNext(){ if(cur<DAYS.length-1){cur++;renderDay();} }
+function jumpToDay(val) {
+  const idx = parseInt(val);
+  if (!isNaN(idx) && idx >= 0 && idx < DAYS.length) { cur=idx; renderDay(); }
+}
+
+function populateDayPicker() {
+  const sel = document.getElementById('day-picker');
+  sel.innerHTML = DAYS.map((d,i) => `<option value="${i}">Day ${d.day}: ${d.theme}</option>`).join('');
+  sel.value = cur;
+}
 
 function updateProgress(){
   ['article','video','dialogue','quiz'].forEach(s=>{
